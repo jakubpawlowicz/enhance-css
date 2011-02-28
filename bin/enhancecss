@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+global.sys = require(/^v0\.[012]/.test(process.version) ? "sys" : "util");
+var argv = require('optimist').argv,
+  enhanceCss = require('enhance-css'),
+  fs = require('fs');
+
+var options = {
+  source: null,
+  target: null,
+  rootPath: null,
+  assetHosts: null,
+  noEmbed: false
+};
+
+if (argv.noembedversion) options.noEmbed = true;
+if (argv.assethosts) options.assetHosts = argv.assethosts;
+if (argv.o) options.target = argv.o;
+if (argv._) options.source = argv._[0];
+
+options.rootPath = argv.root || process.cwd();
+
+if (argv.h || argv.help) {
+  global.sys.print('Usage: enhancecss -o <output-file> --noembedversion --assethosts <host-pattern> --root <root-path> <input-file>\n');
+  process.exit(0);
+}
+
+if (options.source) {
+  fs.readFile(options.source, 'utf8', function(error, text) {
+    if (error) throw error;
+    output(enhance(text));
+  });
+} else {
+  var stdin = process.openStdin();
+  stdin.setEncoding('utf-8');
+  var text = '';
+  stdin.on('data', function(chunk) { text += chunk; });
+  stdin.on('end', function() { output(enhance(text)); });
+}
+
+function enhance(source) {
+  return new enhanceCss({ rootPath: options.rootPath, assetHosts: options.assetHosts, noEmbedVersion: options.noEmbed }).process(source);
+}
+
+function write(target, content) {
+  if (target.length) {
+    target = fs.createWriteStream(target, { flags: 'w', encoding: 'utf-8', mode: 0644 });
+    target.write(content);
+    target.end();
+  } else {
+    target.write(content);
+  }
+}
+
+function output(enhanced) {
+  if (options.target) {
+    write(options.target, enhanced.embedded);
+   if (options.noEmbed)
+     write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
+  } else {
+    write(process.stdout, enhanced.embedded);
+  }
+};
