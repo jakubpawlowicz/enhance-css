@@ -10,18 +10,20 @@ var options = {
   target: null,
   rootPath: null,
   assetHosts: null,
+  pregzip: false,
   noEmbed: false
 };
 
 if (argv.noembedversion) options.noEmbed = true;
 if (argv.assethosts) options.assetHosts = argv.assethosts;
+if (argv.pregzip) options.pregzip = true;
 if (argv.o) options.target = argv.o;
 if (argv._) options.source = argv._[0];
 
 options.rootPath = argv.root || process.cwd();
 
 if (argv.h || argv.help) {
-  global.sys.print('Usage: enhancecss -o <output-file> --noembedversion --assethosts <host-pattern> --root <root-path> <input-file>\n');
+  global.sys.print('Usage: enhancecss -o <output-file> --noembedversion --assethosts <host-pattern> --root <root-path> --pregzip <input-file>\n');
   process.exit(0);
 }
 
@@ -43,10 +45,16 @@ function enhance(source) {
 }
 
 function write(target, content) {
-  if (target.length) {
-    target = fs.createWriteStream(target, { flags: 'w', encoding: 'utf-8', mode: 0644 });
-    target.write(content);
-    target.end();
+  if (typeof target == "string") {
+    targetFile = fs.createWriteStream(target, { flags: 'w', encoding: 'utf-8', mode: 0644 });
+    targetFile.write(content);
+    targetFile.end();
+    
+    if (options.pregzip) {
+      gzippedTargetFile = fs.createWriteStream(target + '.gz', { flags: 'w', encoding: 'utf-8', mode: 0644 });
+      gzippedTargetFile.write(content.compressed);
+      gzippedTargetFile.end();
+    }
   } else {
     target.write(content);
   }
