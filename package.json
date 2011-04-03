@@ -2,13 +2,13 @@
   "name": "enhance-css",
   "author": "Jakub Pawlowicz <jakub@goalsmashers.com> (http://twitter.com/GoalSmashers)",
   "description": "A well-tested CSS enhancer (Base64, assets hosts, cache boosters, etc)",
-  "keywords": ["css", "enhance", "base64", "assets"],
+  "keywords": ["css", "enhance", "base64", "assets", "asset hosts"],
   "homepage": "http://github.com/GoalSmashers/enhance-css",
   "repository": {
     "type" : "git",
     "url" : "http://github.com/GoalSmashers/enhance-css.git"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.js",
   "bin": {
     "enhancecss": "./bin/enhancecss"
