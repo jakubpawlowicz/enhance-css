@@ -1,3 +1,8 @@
+0.2.1 / 2011-04-07
+==================
+
+  * Fixed bug in assembling compressed output (for large files only).
+
 0.2.0 / 2011-04-03
 ==================
 
