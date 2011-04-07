@@ -174,7 +174,7 @@ vows.describe('embedding images').addBatch({
   },
   'compressed embedded content': {
     topic: runOn('a{background:#fff}', { pregzip: true }),
-    'should be string': function(data) {
+    'should be buffer': function(data) {
       assert.ok(Buffer.isBuffer(data.embedded.compressed));
     },
     'should be different from uncompressed': function(data) {
@@ -198,7 +198,7 @@ vows.describe('embedding images').addBatch({
   },
   'compressed non-embedded content': {
     topic: runOn('a{background:#fff}', { pregzip: true, noEmbedVersion: true}),
-    'should be string': function(data) {
+    'should be buffer': function(data) {
       assert.ok(Buffer.isBuffer(data.notEmbedded.compressed));
     },
     'should be different from uncompressed': function(data) {
@@ -217,6 +217,21 @@ vows.describe('embedding images').addBatch({
       },
       teardown: function() {
         fs.unlinkSync('/tmp/data2.gz');
+      }
+    }
+  },
+  'long content': {
+    topic: runOn(fs.readFileSync('./test/data/large.css', 'utf-8'), { pregzip: true }),
+    'uncompressing': {
+      topic: function(data) {
+        fs.writeFileSync('/tmp/data3.gz', data.embedded.compressed);
+        exec("gzip -c -d /tmp/data3.gz", this.callback);
+      },
+      'should be equal to embedded': function(error, uncompressed) {
+        assert.equal(fs.readFileSync('./test/data/large.css', 'utf-8'), uncompressed);
+      },
+      teardown: function() {
+        fs.unlinkSync('/tmp/data3.gz');
       }
     }
   }
