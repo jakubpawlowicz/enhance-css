@@ -1,3 +1,8 @@
+0.2.2 / 2011-09-25
+==================
+
+  * Fixed dependencies - missing 'gzip'. Thanks to fairwinds for reporting it.
+
 0.2.1 / 2011-04-07
 ==================
 
