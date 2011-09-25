@@ -42,3 +42,7 @@ To use one or more asset hosts, just specify *--assetshosts* parameter, e.g.
     cat path/to/first.css path/to/second.css path/to/third.css | enhancecss -o bundled.css --root ./public/ --assethosts assets[0,1].example.com
     
 which will result in all not-embedded image urls bound to either assets0.example.com or assets1.example.com.
+
+## License ##
+
+Enhance-css is released under the MIT license.
