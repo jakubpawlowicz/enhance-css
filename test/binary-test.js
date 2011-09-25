@@ -26,7 +26,7 @@ vows.describe('enhance css binary').addBatch({
   },
   'simple embed': {
     topic: function() {
-      exec("echo 'a{background:url(/test/data/gradient.png?embed);}' | enhancecss -o /tmp/test1.css", this.callback);
+      exec("echo 'a{background:url(/test/data/gradient.png?embed);}' | ./bin/enhancecss -o /tmp/test1.css", this.callback);
     },
     'should give empty output': function(error, data) {
       assert.isEmpty(data);
@@ -40,7 +40,7 @@ vows.describe('enhance css binary').addBatch({
   },
   'embed with --noembedversion option': {
     topic: function() {
-      exec("echo 'a{background:url(/test/data/gradient.png?embed);}' | enhancecss --noembedversion -o /tmp/test2.css", this.callback);
+      exec("echo 'a{background:url(/test/data/gradient.png?embed);}' | ./bin/enhancecss --noembedversion -o /tmp/test2.css", this.callback);
     },
     'should give empty output': function(error, data) {
       assert.isEmpty(data);
@@ -55,7 +55,7 @@ vows.describe('enhance css binary').addBatch({
   },
   'noembed & pregzipped version options': {
     topic: function() {
-      exec("echo 'a{background:url(/test/data/gradient.png?embed);}' | enhancecss --noembedversion --pregzip -o /tmp/test3.css", this.callback);
+      exec("echo 'a{background:url(/test/data/gradient.png?embed);}' | ./bin/enhancecss --noembedversion --pregzip -o /tmp/test3.css", this.callback);
     },
     'should give empty output': function(error, data) {
       assert.isEmpty(data);
