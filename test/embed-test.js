@@ -3,10 +3,10 @@ var vows = require('vows'),
   fs = require('fs'),
   exec = require('child_process').exec,
   EnhanceCSS = require('../lib/enhance.js');
-  
+
 var runOn = function(css, extraOptions) {
   if (!extraOptions) extraOptions = {};
-  
+
   return function() {
     return new EnhanceCSS(append({ rootPath: process.cwd() }, extraOptions)).process(css, this.callback);
   }
@@ -59,7 +59,7 @@ vows.describe('embedding images').addBatch({
   'same urls with mixed characters': {
     topic: runOn("a{background:url('/test/data/gradient.jpg?embed');} div{background:url(/test/data/gradient.jpg?embed);}"),
     'should not be embedded': function(data) {
-      assert.equal(data.embedded.plain, 
+      assert.equal(data.embedded.plain,
         'a{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ');} ' +
         'div{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ');}')
     }
@@ -239,7 +239,7 @@ vows.describe('embedding images').addBatch({
   'list of missing files': {
     topic: runOn('a{background:url(/test/data/gradient2.png)} p{background:url(/test/data/gradient2.jpg)}')().missing,
     'should have both files': function(missing) {
-      assert.length(missing, 2);
+      assert.equal(missing.length, 2);
     },
     'should have files in right order': function(missing) {
       assert.equal(missing[0], '/test/data/gradient2.png');
@@ -249,7 +249,7 @@ vows.describe('embedding images').addBatch({
   'list of not embedded files (duplicates)': {
     topic: runOn('a{background:url(/test/data/gradient.png?embed)} p{background:url(/test/data/gradient.png?embed)}')().duplicates,
     'should have one file': function(duplicates) {
-      assert.length(duplicates, 1);
+      assert.equal(duplicates.length, 1);
     },
     'should have gradient.png': function(duplicates) {
       assert.equal(duplicates[0], '/test/data/gradient.png');
