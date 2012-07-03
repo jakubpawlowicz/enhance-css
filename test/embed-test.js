@@ -259,6 +259,13 @@ vows.describe('embedding images').addBatch({
     }
   }
 }).addBatch({
+  'should correctly process missing files': {
+    topic: runOn('a{background:url(/test/data/gradient2.png)}', { cryptedStamp: true }),
+    'should keep path as is': function(css) {
+      assert.equal("a{background:url(/test/data/gradient2.png)}", css.embedded.plain);
+    }
+  }
+}).addBatch({
   'compressed content': {
     topic: runOn('a{background:#fff}'),
     'not by default': function(data) {
