@@ -244,6 +244,21 @@ vows.describe('embedding images').addBatch({
     }
   }
 }).addBatch({
+  'should correctly process files with dots': {
+    topic: runOn('a{background:url(/test/data/gradient.special.png)}', { cryptedStamp: true }),
+    'should create new file': function() {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient.special-' + stamp + '.png'), true);
+    },
+    'should include stamped file in embed source': function(css) {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal("a{background:url(/test/data/gradient.special-" + stamp + ".png)}", css.embedded.plain);
+    },
+    teardown: function() {
+      exec("rm -rf test/data/gradient.special-*");
+    }
+  }
+}).addBatch({
   'compressed content': {
     topic: runOn('a{background:#fff}'),
     'not by default': function(data) {
