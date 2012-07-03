@@ -1,3 +1,9 @@
+0.3.0 / 2012-07-03
+==================
+
+  * Aded node 0.4.x requirement.
+  * Added cryptedStamp option for renaming image files with MD5 hash attached (hard cache boosters).
+
 0.2.2 / 2011-09-25
 ==================
 
@@ -11,7 +17,7 @@
 0.2.0 / 2011-04-03
 ==================
 
-  * Added --pregzip option for automatic gzipping of enhanced files (not available when output is set to STDOUT). 
+  * Added --pregzip option for automatic gzipping of enhanced files (not available when output is set to STDOUT).
   * Added binary file tests.
 
 0.1.0 / 2011-03-20
