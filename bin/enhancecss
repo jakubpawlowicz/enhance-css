@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-global.sys = require(/^v0\.[012]/.test(process.version) ? "sys" : "util");
 var argv = require('optimist').argv,
-  enhanceCss = require('../index'),
-  fs = require('fs');
+  EnhanceCSS = require('../index'),
+  fs = require('fs'),
+  path = require('path'),
+  util = require('util');
 
 var options = {
   source: null,
@@ -11,19 +12,28 @@ var options = {
   rootPath: null,
   assetHosts: null,
   pregzip: false,
-  noEmbed: false
+  noEmbed: false,
+  cryptedStamp: false
 };
+var fromStdin = !process.env['__DIRECT__'] && process.stdin.readable;
 
 if (argv.noembedversion) options.noEmbed = true;
 if (argv.assethosts) options.assetHosts = argv.assethosts;
 if (argv.pregzip) options.pregzip = true;
+if (argv.cryptedstamp) options.cryptedStamp = true;
 if (argv.o) options.target = argv.o;
 if (argv._) options.source = argv._[0];
 
 options.rootPath = argv.root || process.cwd();
 
-if (argv.h || argv.help) {
-  global.sys.print('Usage: enhancecss -o <output-file> --noembedversion --assethosts <host-pattern> --root <root-path> --pregzip <input-file>\n');
+if (argv.v) {
+  var packageConfig = fs.readFileSync(path.join(path.dirname(fs.realpathSync(process.argv[1])), '../package.json'));
+  util.puts(JSON.parse(packageConfig).version);
+  process.exit(0);
+}
+
+if (argv.h || argv.help || (!fromStdin && argv._.length == 0)) {
+  util.print('usage: enhancecss -o <output-file> [--cryptedstamp] [--noembedversion] [--assethosts <host-pattern>] [--root <root-path>] [--pregzip <input-file>]\n');
   process.exit(0);
 }
 
@@ -41,7 +51,11 @@ if (options.source) {
 }
 
 function enhance(source) {
-  return new enhanceCss({ rootPath: options.rootPath, assetHosts: options.assetHosts, noEmbedVersion: options.noEmbed }).process(source);
+  return new EnhanceCSS({ rootPath: options.rootPath,
+    assetHosts: options.assetHosts,
+    noEmbedVersion: options.noEmbed,
+    cryptedStamp: options.cryptedStamp
+  }).process(source);
 }
 
 function write(target, content) {
@@ -49,7 +63,7 @@ function write(target, content) {
     targetFile = fs.createWriteStream(target, { flags: 'w', encoding: 'utf-8', mode: 0644 });
     targetFile.write(content);
     targetFile.end();
-    
+
     if (options.pregzip) {
       gzippedTargetFile = fs.createWriteStream(target + '.gz', { flags: 'w', encoding: 'utf-8', mode: 0644 });
       gzippedTargetFile.write(content.compressed);

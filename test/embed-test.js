@@ -1,7 +1,9 @@
 var vows = require('vows'),
   assert = require('assert'),
   fs = require('fs'),
+  path = require('path'),
   exec = require('child_process').exec,
+  crypto = require('crypto'),
   EnhanceCSS = require('../lib/enhance.js');
 
 var runOn = function(css, extraOptions) {
@@ -23,6 +25,13 @@ var base64 = function(imageName) {
 
 var mtime = function(imageName) {
   return Date.parse(fs.statSync(process.cwd() + '/test/data/' + imageName).mtime) / 1000;
+};
+
+var cryptedStamp = function(imageName) {
+  var data = fs.readFileSync(process.cwd() + '/test/data/' + imageName);
+  var stamp = crypto.createHash('md5');
+  stamp.update(data.toString('utf8'));
+  return stamp.digest('hex');
 };
 
 vows.describe('embedding images').addBatch({
@@ -163,6 +172,75 @@ vows.describe('embedding images').addBatch({
     'if requested': function(css) {
       assert.equal(runOn(css, { noEmbedVersion: true })().notEmbedded.plain,
         'a{background:url(/test/data/gradient.png?' + mtime('gradient.png') + ')} p{background:url(/test/data/gradient.png?' + mtime('gradient.png') + ')}')
+    }
+  }
+}).addBatch({
+  'should not add crypted stamp instead of timestamp': {
+    'on CSS without images': {
+      topic: runOn('a{background:#fff}', { cryptedStamp: true }),
+      'should act as identity transformation': function(css) {
+        assert.equal(css.embedded.plain, css.original);
+      }
+    },
+    'on CSS with embedded images': {
+      topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true }),
+      'should not create new file': function() {
+        var stamp = cryptedStamp('gradient.png');
+        assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), false);
+      }
+    }
+  }
+}).addBatch({
+  'should add crypted stamp instead of timestamp on CSS with normal images': {
+    topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true }),
+    'should create new file': function() {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
+    },
+    'should include stamped file in embed source': function(css) {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+    },
+    teardown: function() {
+      exec("rm -rf test/data/gradient-*");
+    }
+  }
+}).addBatch({
+  'should add crypted stamp instead of timestamp on non-embedded source': {
+    topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true, noEmbedVersion: true }),
+    'should create new file': function() {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
+    },
+    'should include stamped file in embed source': function(css) {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+    },
+    'should include stamped file in non-embedded source': function(css) {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+    },
+    teardown: function() {
+      exec("rm -rf test/data/gradient-*");
+    }
+  }
+}).addBatch({
+  'should add crypted stamp instead of timestamp on non-embedded source for embedded image': {
+    topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true, noEmbedVersion: true }),
+    'should create new file': function() {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
+    },
+    'should not include stamped file in embed source': function(css) {
+      var stamp = cryptedStamp('gradient.png');
+      assert.notEqual("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+    },
+    'should include stamped file in non-embedded source': function(css) {
+      var stamp = cryptedStamp('gradient.png');
+      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+    },
+    teardown: function() {
+      exec("rm -rf test/data/gradient-*");
     }
   }
 }).addBatch({

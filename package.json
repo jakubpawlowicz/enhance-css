@@ -16,5 +16,8 @@
   "dependencies": {
     "optimist": "0.1.x",
     "gzip": "0.1.x"
+  },
+  "engines": {
+    "node": ">=0.4.0"
   }
 }
