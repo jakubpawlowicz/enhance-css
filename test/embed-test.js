@@ -259,7 +259,13 @@ vows.describe('embedding images').addBatch({
     }
   }
 }).addBatch({
-  'should correctly process missing files': {
+  'should correctly process missing files with embed': {
+    topic: runOn('a{background:url(/test/data/gradient2.png?embed)}', { cryptedStamp: true }),
+    'should keep path as is': function(css) {
+      assert.equal("a{background:url(/test/data/gradient2.png?embed)}", css.embedded.plain);
+    }
+  },
+  'should correctly process missing files for crypted stamps': {
     topic: runOn('a{background:url(/test/data/gradient2.png)}', { cryptedStamp: true }),
     'should keep path as is': function(css) {
       assert.equal("a{background:url(/test/data/gradient2.png)}", css.embedded.plain);
