@@ -1,3 +1,8 @@
+0.3.3 / 2012-07-04
+==================
+
+  * Fix for script failing for missing embedded files when using crypted stamps.
+
 0.3.2 / 2012-07-03
 ==================
 
