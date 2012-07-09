@@ -1,3 +1,11 @@
+0.4.0 / 2012-07-09
+==================
+
+  * Requires node 0.6+.
+  * Replaced gzip with node's native zlib.
+  * Fixed asynchronous mode for binaries (creating gzip data).
+  * Added testing noembed & pregzip.
+
 0.3.3 / 2012-07-04
 ==================
 
