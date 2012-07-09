@@ -183,10 +183,10 @@ vows.describe('embedding images').addBatch({
       }
     },
     'on CSS with embedded images': {
-      topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true }),
+      topic: runOn('a{background:url(/test/data/gradient.jpg?embed)}', { cryptedStamp: true }),
       'should not create new file': function() {
-        var stamp = cryptedStamp('gradient.png');
-        assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), false);
+        var stamp = cryptedStamp('gradient.jpg');
+        assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.jpg'), false);
       }
     }
   }
