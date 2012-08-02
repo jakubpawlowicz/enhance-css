@@ -2,7 +2,7 @@
 
 Enhance-css is a node.js library for enhancing CSS with:
 
-* external files timestamps (to boost chaching);
+* external files stamps to boost chaching (either timestamps or MD5 hashes);
 * image embedding to Base64 (to reduce number of requests);
 * spawning assets into multiple asset hosts (to paralelize requests);
 
