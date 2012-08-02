@@ -4,6 +4,7 @@ var vows = require('vows'),
   path = require('path'),
   exec = require('child_process').exec,
   crypto = require('crypto'),
+  existsSync = fs.existsSync || path.existsSync,
   EnhanceCSS = require('../lib/enhance.js');
 
 var runOn = function(css, extraOptions) {
@@ -186,7 +187,7 @@ vows.describe('embedding images').addBatch({
       topic: runOn('a{background:url(/test/data/gradient.jpg?embed)}', { cryptedStamp: true }),
       'should not create new file': function() {
         var stamp = cryptedStamp('gradient.jpg');
-        assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.jpg'), false);
+        assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.jpg'), false);
       }
     }
   }
@@ -195,7 +196,7 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true }),
     'should create new file': function() {
       var stamp = cryptedStamp('gradient.png');
-      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
+      assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
     },
     'should include stamped file in embed source': function(css) {
       var stamp = cryptedStamp('gradient.png');
@@ -210,7 +211,7 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true, noEmbedVersion: true }),
     'should create new file': function() {
       var stamp = cryptedStamp('gradient.png');
-      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
+      assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
     },
     'should include stamped file in embed source': function(css) {
       var stamp = cryptedStamp('gradient.png');
@@ -229,7 +230,7 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true, noEmbedVersion: true }),
     'should create new file': function() {
       var stamp = cryptedStamp('gradient.png');
-      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
+      assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
     },
     'should not include stamped file in embed source': function(css) {
       var stamp = cryptedStamp('gradient.png');
@@ -248,7 +249,7 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient.special.png)}', { cryptedStamp: true }),
     'should create new file': function() {
       var stamp = cryptedStamp('gradient.png');
-      assert.equal(path.existsSync(process.cwd() + '/test/data/gradient.special-' + stamp + '.png'), true);
+      assert.equal(existsSync(process.cwd() + '/test/data/gradient.special-' + stamp + '.png'), true);
     },
     'should include stamped file in embed source': function(css) {
       var stamp = cryptedStamp('gradient.png');
