@@ -35,6 +35,16 @@ var cryptedStamp = function(imageName) {
   return stamp.digest('hex');
 };
 
+var createTmp = function() {
+  var p = path.join(process.cwd(), 'test', 'tmp');
+  if (!existsSync(p))
+    fs.mkdirSync(p);
+};
+
+var tmpPath = function(suffix) {
+  return path.join(process.cwd(), 'test', 'tmp', suffix);
+};
+
 vows.describe('embedding images').addBatch({
   'plain content': {
     topic: runOn('div{width:100px;height:50px}'),
@@ -150,7 +160,8 @@ vows.describe('embedding images').addBatch({
       )
     }
   }
-}).addBatch({
+})
+.addBatch({
   'getting non-embedded version (IE7)': {
     topic: 'a{background:url(/test/data/gradient.png)} p{background:url(/test/data/gradient.jpg)}',
     'not by default': function(css) {
@@ -292,14 +303,15 @@ vows.describe('embedding images').addBatch({
     },
     'uncompressing': {
       topic: function(data) {
-        fs.writeFileSync('/tmp/data1.gz', data.embedded.compressed);
-        exec("gzip -c -d /tmp/data1.gz", this.callback);
+        createTmp();
+        fs.writeFileSync(tmpPath('data1.gz'), data.embedded.compressed);
+        exec("gzip -c -d " + tmpPath('data1.gz'), this.callback);
       },
       'should be equal to embedded': function(error, uncompressed) {
         assert.equal('a{background:#fff}', uncompressed);
       },
       teardown: function() {
-        fs.unlinkSync('/tmp/data1.gz');
+        fs.unlinkSync(tmpPath('data1.gz'));
       }
     }
   },
@@ -316,14 +328,15 @@ vows.describe('embedding images').addBatch({
     },
     'uncompressing': {
       topic: function(data) {
-        fs.writeFileSync('/tmp/data2.gz', data.notEmbedded.compressed);
-        exec("gzip -c -d /tmp/data2.gz", this.callback);
+        createTmp();
+        fs.writeFileSync(tmpPath('data2.gz'), data.notEmbedded.compressed);
+        exec("gzip -c -d " + tmpPath('data2.gz'), this.callback);
       },
       'should be equal to embedded': function(error, uncompressed) {
         assert.equal('a{background:#fff}', uncompressed);
       },
       teardown: function() {
-        fs.unlinkSync('/tmp/data2.gz');
+        fs.unlinkSync(tmpPath('data2.gz'));
       }
     }
   },
@@ -331,14 +344,15 @@ vows.describe('embedding images').addBatch({
     topic: runOn(fs.readFileSync('./test/data/large.css', 'utf-8'), { pregzip: true }),
     'uncompressing': {
       topic: function(data) {
-        fs.writeFileSync('/tmp/data3.gz', data.embedded.compressed);
-        exec("gzip -c -d /tmp/data3.gz", this.callback);
+        createTmp();
+        fs.writeFileSync(tmpPath('data3.gz'), data.embedded.compressed);
+        exec("gzip -c -d " + tmpPath('data3.gz'), this.callback);
       },
       'should be equal to embedded': function(error, uncompressed) {
         assert.equal(fs.readFileSync('./test/data/large.css', 'utf-8'), uncompressed);
       },
       teardown: function() {
-        fs.unlinkSync('/tmp/data3.gz');
+        fs.unlinkSync(tmpPath('data3.gz'));
       }
     }
   }
@@ -369,7 +383,7 @@ vows.describe('embedding images').addBatch({
       assert.equal(parsed.relative, '/test/data/gradient.png');
     },
     'should get right absolute path': function(parsed) {
-      assert.equal(parsed.absolute, process.cwd() + '/test/data/gradient.png');
+      assert.equal(parsed.absolute, path.join(process.cwd(), 'test', 'data', 'gradient.png'));
     },
     'should exists': function(parsed) {
       assert.isTrue(parsed.exists);
@@ -384,7 +398,7 @@ vows.describe('embedding images').addBatch({
       assert.equal(parsed.relative, '/test/data/gradient.png');
     },
     'should get right absolute path': function(parsed) {
-      assert.equal(parsed.absolute, process.cwd() + '/test/data/gradient.png');
+      assert.equal(parsed.absolute, path.join(process.cwd(), 'test', 'data', 'gradient.png'));
     },
     'should exists': function(parsed) {
       assert.isTrue(parsed.exists);
@@ -400,7 +414,7 @@ vows.describe('embedding images').addBatch({
       assert.equal(parsed.relative, '/test/data/gradient.png');
     },
     'should get right absolute path': function(parsed) {
-      assert.equal(parsed.absolute, process.cwd() + '/test/data/gradient.png');
+      assert.equal(parsed.absolute, path.join(process.cwd(), 'test', 'data', 'gradient.png'));
     },
     'should exists': function(parsed) {
       assert.isTrue(parsed.exists);
@@ -415,7 +429,7 @@ vows.describe('embedding images').addBatch({
       assert.equal(parsed.relative, '/test/data/gradient.png');
     },
     'should get right absolute path': function(parsed) {
-      assert.equal(parsed.absolute, process.cwd() + '/test/data/gradient.png');
+      assert.equal(parsed.absolute, path.join(process.cwd(), 'test', 'data', 'gradient.png'));
     },
     'should exists': function(parsed) {
       assert.isTrue(parsed.exists);

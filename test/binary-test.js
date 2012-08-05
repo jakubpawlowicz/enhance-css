@@ -6,6 +6,8 @@ var vows = require('vows'),
   zlib = require('zlib'),
   existsSync = fs.existsSync || path.existsSync;
 
+var isWindows = process.platform == 'win32';
+
 var source = "a{background:url(/test/data/gradient.png?embed);}";
 
 var checkFiles = function(fileName, options) {
@@ -45,36 +47,44 @@ var cleanup = function(no, callback) {
   if (callback) callback();
 };
 
+var binaryContext = function(options, context) {
+  context.topic = function() {
+    if (isWindows)
+      exec("set __DIRECT__=1 & node .\\bin\\enhancecss " + options, this.callback);
+    else
+      exec("__DIRECT__=1 ./bin/enhancecss " + options, this.callback);
+  };
+  return context;
+};
+
+var pipelinedContext = function(options, context) {
+  if (isWindows)
+    return {};
+
+  context.topic = function() {
+    exec("echo '" + source + "' | ./bin/enhancecss " + options, this.callback);
+  };
+  return context;
+};
+
 vows.describe('enhance css binary').addBatch({
-  'no option': {
-    topic: function() {
-      exec('__DIRECT__=1 ./bin/enhancecss', this.callback);
-    },
+  'no option': binaryContext("", {
     'should give usage info': function(error, stdout) {
       assert.equal(0, stdout.indexOf('usage:'));
     }
-  },
-  'help option': {
-    topic: function() {
-      exec('./bin/enhancecss -h', this.callback);
-    },
+  }),
+  'help option': binaryContext("-h", {
     'should give usage info': function(error, stdout) {
       assert.equal(0, stdout.indexOf('usage:'));
     }
-  },
-  'version option': {
-    topic: function() {
-      exec('./bin/enhancecss -v', this.callback);
-    },
+  }),
+  'version option': binaryContext("-v", {
     'should give usage info': function(error, stdout) {
       var version = JSON.parse(fs.readFileSync('./package.json')).version;
       assert.equal(stdout, version + "\n");
     }
-  },
-  'simple embed': {
-    topic: function() {
-      exec("echo '" + source + "' | ./bin/enhancecss -o /tmp/test1.css", this.callback);
-    },
+  }),
+  'simple embed': pipelinedContext("-o /tmp/test1.css", {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -82,11 +92,8 @@ vows.describe('enhance css binary').addBatch({
       checkFiles('test1', { noEmbed: false, pregzip: false });
     },
     teardown: cleanup(1)
-  },
-  'embed with --noembedversion option': {
-    topic: function() {
-      exec("echo '" + source + "' | ./bin/enhancecss --noembedversion -o /tmp/test2.css", this.callback);
-    },
+  }),
+  'embed with --noembedversion option': pipelinedContext("--noembedversion -o /tmp/test2.css", {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -94,11 +101,8 @@ vows.describe('enhance css binary').addBatch({
       checkFiles('test2', { noEmbed: true, pregzip: false });
     },
     teardown: cleanup(2)
-  },
-  'embed with noembed and gzip': {
-    topic: function() {
-      exec("echo '" + source + "' | ./bin/enhancecss --noembedversion --pregzip -o /tmp/test3.css", this.callback);
-    },
+  }),
+  'embed with noembed and gzip': pipelinedContext("--noembedversion --pregzip -o /tmp/test3.css", {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -106,11 +110,8 @@ vows.describe('enhance css binary').addBatch({
       checkFiles('test3', { noEmbed: true, pregzip: true });
     },
     teardown: cleanup(3)
-  },
-  'noembed and crypted stamp options': {
-    topic: function() {
-      exec("echo '" + source + "' | ./bin/enhancecss --cryptedstamp --noembedversion -o /tmp/test4.css", this.callback);
-    },
+  }),
+  'noembed and crypted stamp options': pipelinedContext('--cryptedstamp --noembedversion -o /tmp/test4.css', {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -128,5 +129,5 @@ vows.describe('enhance css binary').addBatch({
     teardown: cleanup(4, function() {
       exec('rm -rf ' + process.cwd() + '/test/data/gradient-*.png');
     })
-  }
+  })
 }).export(module);
