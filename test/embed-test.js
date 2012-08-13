@@ -437,7 +437,19 @@ vows.describe('embedding images').addBatch({
     'should not have query options': function(parsed) {
       assert.isEmpty(parsed.query);
     }
-  }
+  },
+  'parse relative url': {
+    topic: new EnhanceCSS({ rootPath: process.cwd() }).parseImageUrl('test/data/gradient.png'),
+    'should get right relative path': function(parsed) {
+      assert.equal(parsed.relative, 'test/data/gradient.png');
+    },
+    'should get right absolute path': function(parsed) {
+      assert.equal(parsed.absolute, path.join(process.cwd(), 'test', 'data', 'gradient.png'));
+    },
+    'should exists': function(parsed) {
+      assert.isTrue(parsed.exists);
+    }
+  },
 }).addBatch({
   'get empty asset host': {
     topic: new EnhanceCSS({}).nextAssetHost(),
