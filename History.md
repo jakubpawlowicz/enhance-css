@@ -1,3 +1,8 @@
+0.5.1 / 2012-08-14
+==================
+
+ * Fixed parsing relative URLs (kudos to @borbit for a patch!)
+
 0.5.0 / 2012-08-05
 ==================
 
