@@ -1,6 +1,7 @@
 var vows = require('vows'),
   assert = require('assert'),
   fs = require('fs'),
+  zlib = require('zlib'),
   path = require('path'),
   exec = require('child_process').exec,
   crypto = require('crypto'),
@@ -303,15 +304,10 @@ vows.describe('embedding images').addBatch({
     },
     'uncompressing': {
       topic: function(data) {
-        createTmp();
-        fs.writeFileSync(tmpPath('data1.gz'), data.embedded.compressed);
-        exec("gzip -c -d " + tmpPath('data1.gz'), this.callback);
+        zlib.unzip(data.embedded.compressed, this.callback);
       },
       'should be equal to embedded': function(error, uncompressed) {
         assert.equal('a{background:#fff}', uncompressed);
-      },
-      teardown: function() {
-        fs.unlinkSync(tmpPath('data1.gz'));
       }
     }
   },
@@ -328,15 +324,10 @@ vows.describe('embedding images').addBatch({
     },
     'uncompressing': {
       topic: function(data) {
-        createTmp();
-        fs.writeFileSync(tmpPath('data2.gz'), data.notEmbedded.compressed);
-        exec("gzip -c -d " + tmpPath('data2.gz'), this.callback);
+        zlib.unzip(data.notEmbedded.compressed, this.callback);
       },
       'should be equal to embedded': function(error, uncompressed) {
         assert.equal('a{background:#fff}', uncompressed);
-      },
-      teardown: function() {
-        fs.unlinkSync(tmpPath('data2.gz'));
       }
     }
   },
@@ -344,15 +335,10 @@ vows.describe('embedding images').addBatch({
     topic: runOn(fs.readFileSync('./test/data/large.css', 'utf-8'), { pregzip: true }),
     'uncompressing': {
       topic: function(data) {
-        createTmp();
-        fs.writeFileSync(tmpPath('data3.gz'), data.embedded.compressed);
-        exec("gzip -c -d " + tmpPath('data3.gz'), this.callback);
+        zlib.unzip(data.embedded.compressed, this.callback);
       },
       'should be equal to embedded': function(error, uncompressed) {
         assert.equal(fs.readFileSync('./test/data/large.css', 'utf-8'), uncompressed);
-      },
-      teardown: function() {
-        fs.unlinkSync(tmpPath('data3.gz'));
       }
     }
   }
