@@ -13,6 +13,9 @@
   "bin": {
     "enhancecss": "./bin/enhancecss"
   },
+  "scripts": {
+    "test": "node_modules/.bin/vows test/*-test.js"
+  },
   "dependencies": {
     "optimist": "0.3.x"
   },
