@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/GoalSmashers/enhance-css.png)](http://travis-ci.org/GoalSmashers/enhance-css)
 ## What is enhance-css? ##
 
 Enhance-css is a node.js library for enhancing CSS with:
