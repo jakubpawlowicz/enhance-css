@@ -5,6 +5,7 @@ var vows = require('vows'),
   path = require('path'),
   exec = require('child_process').exec,
   crypto = require('crypto'),
+  exists = fs.exists || path.exists,
   existsSync = fs.existsSync || path.existsSync,
   EnhanceCSS = require('../lib/enhance.js');
 
@@ -221,17 +222,21 @@ vows.describe('embedding images').addBatch({
 }).addBatch({
   'should add crypted stamp instead of timestamp on non-embedded source': {
     topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true, noEmbedVersion: true }),
-    'should create new file': function() {
-      var stamp = cryptedStamp('gradient.png');
-      assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
-    },
-    'should include stamped file in embed source': function(css) {
-      var stamp = cryptedStamp('gradient.png');
-      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
-    },
-    'should include stamped file in non-embedded source': function(css) {
-      var stamp = cryptedStamp('gradient.png');
-      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+    'once file exists': {
+      topic: function(css) {
+        var self = this,
+          stamp = cryptedStamp('gradient.png');
+
+        exists(process.cwd() + '/test/data/gradient-' + stamp + '.png', function() {
+          self.callback(css, stamp);
+        });
+      },
+      'should include stamped file in embed source': function(css, stamp) {
+        assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+      },
+      'should include stamped file in non-embedded source': function(css, stamp) {
+        assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+      }
     },
     teardown: function() {
       exec("rm -rf test/data/gradient-*");
@@ -240,17 +245,21 @@ vows.describe('embedding images').addBatch({
 }).addBatch({
   'should add crypted stamp instead of timestamp on non-embedded source for embedded image': {
     topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true, noEmbedVersion: true }),
-    'should create new file': function() {
-      var stamp = cryptedStamp('gradient.png');
-      assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + stamp + '.png'), true);
-    },
-    'should not include stamped file in embed source': function(css) {
-      var stamp = cryptedStamp('gradient.png');
-      assert.notEqual("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
-    },
-    'should include stamped file in non-embedded source': function(css) {
-      var stamp = cryptedStamp('gradient.png');
-      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+    'once file exists': {
+      topic: function(css) {
+        var self = this,
+          stamp = cryptedStamp('gradient.png');
+
+        exists(process.cwd() + '/test/data/gradient-' + stamp + '.png', function() {
+          self.callback(css, stamp);
+        });
+      },
+      'should not include stamped file in embed source': function(css, stamp) {
+        assert.notEqual("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+      },
+      'should include stamped file in non-embedded source': function(css, stamp) {
+        assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+      }
     },
     teardown: function() {
       exec("rm -rf test/data/gradient-*");
