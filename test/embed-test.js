@@ -450,47 +450,113 @@ vows.describe('embedding images').addBatch({
     topic: new EnhanceCSS({}).nextAssetHost(),
     'from empty configuration': function(host) { assert.equal(host, null); }
   },
-  'get one asset host': {
+  'get single asset host fixed with': {
     topic: new EnhanceCSS({ assetHosts: 'assets.example.com' }).nextAssetHost(),
+    'relative protocol': function(host) {
+      assert.equal(host, '//assets.example.com');
+    }
+  },
+  'get single asset host not fixed if': [{
+    topic: new EnhanceCSS({ assetHosts: '//assets.example.com' }).nextAssetHost(),
+    'relative protocol passed': function(host) {
+      assert.equal(host, '//assets.example.com');
+    }
+  }, {
+    topic: new EnhanceCSS({ assetHosts: 'http://assets.example.com' }).nextAssetHost(),
+    '"http" protocol passed': function(host) {
+      assert.equal(host, 'http://assets.example.com');
+    }
+  }, {
+    topic: new EnhanceCSS({ assetHosts: 'https://assets.example.com' }).nextAssetHost(),
+    '"https" protocol passed': function(host) {
+      assert.equal(host, 'https://assets.example.com');
+    }
+  }],
+
+  'get multiple asset hosts fixed with': {
+    topic: function() {
+      return new EnhanceCSS({ assetHosts: 'assets[0,1].example.com' });
+    },
+    'relative protocol, for first in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), '//assets0.example.com');
+    },
+    'relative protocol, for second in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), '//assets1.example.com');
+    }
+  },
+  'get multiple asset hosts not fixed if': [{
+    topic: function() {
+      return new EnhanceCSS({ assetHosts: '//assets[0,1].example.com' });
+    },
+    'relative protocol passed, for first in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), '//assets0.example.com');
+    },
+    'relative protocol passed, for second in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), '//assets1.example.com');
+    }
+  }, {
+    topic: function() {
+      return new EnhanceCSS({ assetHosts: 'http://assets[0,1].example.com' });
+    },
+    '"http" protocol passed, for first in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), 'http://assets0.example.com');
+    },
+    '"http" protocol passed, for second in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), 'http://assets1.example.com');
+    }
+  }, {
+    topic: function() {
+      return new EnhanceCSS({ assetHosts: 'https://assets[0,1].example.com' });
+    },
+    '"https" protocol passed, for first in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), 'https://assets0.example.com');
+    },
+    '"https" protocol passed, for second in list': function(enhance) {
+      assert.equal(enhance.nextAssetHost(), 'https://assets1.example.com');
+    }
+  }],
+
+  'get one asset host': {
+    topic: new EnhanceCSS({ assetHosts: '//assets.example.com' }).nextAssetHost(),
     'as first host from list': function(host) {
-      assert.equal(host, 'assets.example.com');
+      assert.equal(host, '//assets.example.com');
     },
     'as second host from list': function(host) {
-      assert.equal(host, 'assets.example.com');
+      assert.equal(host, '//assets.example.com');
     }
   },
   'get one asset host from multiple configuration - ': {
     topic: function() {
-      return new EnhanceCSS({ assetHosts: 'assets[0,1,2].example.com' });
+      return new EnhanceCSS({ assetHosts: '//assets[0,1,2].example.com' });
     },
     'first': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'assets0.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//assets0.example.com');
     },
     'second': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'assets1.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//assets1.example.com');
     },
     'third': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'assets2.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//assets2.example.com');
     },
     'fourth': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'assets0.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//assets0.example.com');
     }
   },
   'get one asset host from list of different subdomains': {
     topic: function() {
-      return new EnhanceCSS({ assetHosts: '[alpha,beta,gamma].example.com' });
+      return new EnhanceCSS({ assetHosts: '//[alpha,beta,gamma].example.com' });
     },
     'first': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'alpha.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//alpha.example.com');
     },
     'second': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'beta.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//beta.example.com');
     },
     'third': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'gamma.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//gamma.example.com');
     },
     'fourth': function(enhanceCSS) {
-      assert.equal(enhanceCSS.nextAssetHost(), 'alpha.example.com');
+      assert.equal(enhanceCSS.nextAssetHost(), '//alpha.example.com');
     }
   }
 }).export(module);
