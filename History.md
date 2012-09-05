@@ -1,3 +1,8 @@
+0.5.2 / 2012-09-05
+==================
+
+ * Adding relative protocol to asset hosts if protocol part is not provided. (patch thanks to @borbit)
+
 0.5.1 / 2012-08-14
 ==================
 
