@@ -13,7 +13,8 @@ var options = {
   assetHosts: null,
   pregzip: false,
   noEmbed: false,
-  cryptedStamp: false
+  cryptedStamp: false,
+  stamp: true
 };
 var fromStdin = !process.env['__DIRECT__'] && process.stdin.readable;
 
@@ -23,6 +24,7 @@ if (argv.pregzip) options.pregzip = true;
 if (argv.cryptedstamp) options.cryptedStamp = true;
 if (argv.o) options.target = argv.o;
 if (argv._) options.source = argv._[0];
+if (argv.nostamp) options.stamp = false;
 
 options.rootPath = argv.root || process.cwd();
 
@@ -55,7 +57,8 @@ function enhance(source, callback) {
     assetHosts: options.assetHosts,
     noEmbedVersion: options.noEmbed,
     cryptedStamp: options.cryptedStamp,
-    pregzip: options.pregzip
+    pregzip: options.pregzip,
+    stamp: options.stamp
   }).process(source, function(error, data) {
     if (error) throw error;
     callback(data);

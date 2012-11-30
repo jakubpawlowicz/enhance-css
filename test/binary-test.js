@@ -22,8 +22,13 @@ var checkFiles = function(fileName, options) {
 
   // verify content
   assert.include(fs.readFileSync(pathToFile()).toString('utf8'), 'a{background:url(data:image/png;base64');
-  if (options.noEmbed)
+  if (options.noEmbed) {
     assert.include(fs.readFileSync(pathToFile(true)).toString('utf8'), 'a{background:url(/test/data/gradient');
+
+    if (options.stamp === false) {
+      assert.match(fs.readFileSync(pathToFile(true)).toString('utf8'), /gradient\.\w+\)/);
+    }
+  }
 
   if (options.pregzip) {
     zlib.gunzip(fs.readFileSync(pathToFile(false, true)), function(error, result) {
@@ -90,6 +95,15 @@ vows.describe('enhance css binary').addBatch({
     },
     'should create valid files': function() {
       checkFiles('test1', { noEmbed: false, pregzip: false });
+    },
+    teardown: cleanup(1)
+  }),
+  'simple embed with no stamps': pipelinedContext("--noembedversion --nostamp -o /tmp/test1.css", {
+    'should give empty output': function(error, stdout) {
+      assert.isEmpty(stdout);
+    },
+    'should create valid files': function() {
+      checkFiles('test1', { stamp: false, noEmbed: true, pregzip: false });
     },
     teardown: cleanup(1)
   }),

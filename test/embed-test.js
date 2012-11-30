@@ -561,7 +561,7 @@ vows.describe('embedding images').addBatch({
   }
 }).addBatch({
   'not embedded files should not get mtime timestamp if "stamp" option equals false': {
-    topic: runOn('div{background:url(/test/data/gradient.jpg)}', {stamp: false, noEmbedVersion: true}),
+    topic: runOn('div{background:url(/test/data/gradient.jpg)}', { stamp: false, noEmbedVersion: true }),
     'in the "embedded" version': function(data) {
       assert.equal(data.embedded.plain, data.original);
     },
