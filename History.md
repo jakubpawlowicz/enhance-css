@@ -1,3 +1,9 @@
+0.6.0 / 2012-11-30
+==================
+
+ * Added 'stamp' option (default to true) which controls adding timestamps. (thanks to @borbit)
+ * Added '--nostamp' option to binary.
+
 0.5.2 / 2012-09-05
 ==================
 
