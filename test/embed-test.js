@@ -559,4 +559,14 @@ vows.describe('embedding images').addBatch({
       assert.equal(enhanceCSS.nextAssetHost(), '//alpha.example.com');
     }
   }
+}).addBatch({
+  'not embedded files should not get mtime timestamp if "stamp" option equals false': {
+    topic: runOn('div{background:url(/test/data/gradient.jpg)}', {stamp: false, noEmbedVersion: true}),
+    'in the "embedded" version': function(data) {
+      assert.equal(data.embedded.plain, data.original);
+    },
+    'in the "not embedded" version': function(data) {
+      assert.equal(data.notEmbedded.plain, data.original);
+    }
+  }
 }).export(module);
