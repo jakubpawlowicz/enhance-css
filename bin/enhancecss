@@ -88,8 +88,8 @@ function write(target, content) {
 function output(enhanced) {
   if (options.target) {
     write(options.target, enhanced.embedded);
-   if (options.noEmbed)
-     write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
+  if (options.noEmbed)
+    write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
   } else {
     write(process.stdout, enhanced.embedded);
   }
