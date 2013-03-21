@@ -10,7 +10,8 @@ var vows = require('vows'),
   EnhanceCSS = require('../lib/enhance.js');
 
 var runOn = function(css, extraOptions) {
-  if (!extraOptions) extraOptions = {};
+  if (!extraOptions)
+    extraOptions = {};
 
   return function() {
     return new EnhanceCSS(append({ rootPath: process.cwd() }, extraOptions)).process(css, this.callback);
@@ -18,7 +19,8 @@ var runOn = function(css, extraOptions) {
 };
 
 var append = function(o1, o2) {
-  for (var k in o2) o1[k] = o2[k];
+  for (var k in o2)
+    o1[k] = o2[k];
   return o1;
 };
 
