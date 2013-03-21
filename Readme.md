@@ -14,6 +14,7 @@ Enhance-css is a [node.js](http://nodejs.org/) library for enhancing CSS with:
 There is also an option to create non-embedded version suited well
 for older browsers (IE 7 and below).
 
+
 ## Usage
 
 ### What are the requirements?
@@ -65,6 +66,14 @@ cat path/to/first.css path/to/second.css path/to/third.css | enhancecss -o bundl
 ```
 
 which will result in all not-embedded image URLs bound to either assets0.example.com or assets1.example.com.
+
+### What are the enhance-css' dev commands?
+
+First clone the source, then run:
+
+* `npm run check` to check JS sources with [JSHint](https://github.com/jshint/jshint/)
+* `npm test` for the test suite
+
 
 ## License
 
