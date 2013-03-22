@@ -1,1 +1,1 @@
-module.exports = require("./lib/enhance");
+module.exports = require('./lib/enhance');

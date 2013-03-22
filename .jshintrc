@@ -1,0 +1,18 @@
+{
+  "node" : true,
+  "es5" : true,
+  "browser" : false,
+
+  "camelcase": true,
+  "curly": false,
+  "eqeqeq": false,
+  "indent": 2,
+  "latedef": true,
+  "multistr": true,
+  "noarg": true,
+  "plusplus": false,
+  "regexp": true,
+  "strict": false,
+  "trailing": true,
+  "unused": true
+}
