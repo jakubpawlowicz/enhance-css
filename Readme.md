@@ -30,7 +30,20 @@ node.js 0.8.0+ on Windows
 npm install enhance-css
 ```
 
-### How to use enhance-css?
+### How to use enhance-css CLI?
+
+```
+enhancecss -o <output-file> <source-file>
+
+--cryptedstamp                  Rename image files with MD5 hash attached (hard cache boosters)
+--noembedversion                Output the bundled CSS and the non embedded version
+--assethosts <host-pattern>     Use one or more asset hosts
+--root <root-path>              Locate images referenced in the css files
+--pregzip <input-file>          Automatically gzip the enhanced files (not available when output is set to STDOUT)
+-o [output-file]                Use [output-file] as output instead of STDOUT
+```
+
+#### Examples:
 
 Most likely you are going to pass multiple CSS files into it
 and specify root directory and output file, e.g.
@@ -39,7 +52,7 @@ and specify root directory and output file, e.g.
 cat path/to/first.css path/to/second.css path/to/third.css | enhancecss -o bundled.css --root ./public/
 ```
 
-The `--root` parameter is required to properly locate images referenced in css files.
+The `--root` parameter is required to properly locate images referenced in the css files.
 
 To **embed images** in Base64 just add the *embed* argument to the image url, e.g.
 
@@ -47,7 +60,7 @@ To **embed images** in Base64 just add the *embed* argument to the image url, e.
 a { background: url(/images/arrow.png?embed) 0 0 no-repeat; }
 ```
 
-### No embed version
+### Non-embedded version
 
 In case you also need to support older browser, just add `--noembedversion` parameter, e.g.
 
@@ -65,7 +78,7 @@ To use one or more asset hosts, just specify `--assetshosts` parameter, e.g.
 cat path/to/first.css path/to/second.css path/to/third.css | enhancecss -o bundled.css --root ./public/ --assethosts assets[0,1].example.com
 ```
 
-which will result in all not-embedded image URLs bound to either assets0.example.com or assets1.example.com.
+which will result in all non-embedded image URLs bound to either assets0.example.com or assets1.example.com.
 
 ### What are the enhance-css' dev commands?
 
