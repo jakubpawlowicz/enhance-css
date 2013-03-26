@@ -18,13 +18,20 @@ var options = {
 };
 var fromStdin = !process.env['__DIRECT__'] && process.stdin.readable;
 
-if (argv.noembedversion) options.noEmbed = true;
-if (argv.assethosts) options.assetHosts = argv.assethosts;
-if (argv.pregzip) options.pregzip = true;
-if (argv.cryptedstamp) options.cryptedStamp = true;
-if (argv.o) options.target = argv.o;
-if (argv._) options.source = argv._[0];
-if (argv.nostamp) options.stamp = false;
+if (argv.noembedversion)
+  options.noEmbed = true;
+if (argv.assethosts)
+  options.assetHosts = argv.assethosts;
+if (argv.pregzip)
+  options.pregzip = true;
+if (argv.cryptedstamp)
+  options.cryptedStamp = true;
+if (argv.o)
+  options.target = argv.o;
+if (argv._)
+  options.source = argv._[0];
+if (argv.nostamp)
+  options.stamp = false;
 
 options.rootPath = argv.root || process.cwd();
 
@@ -41,7 +48,8 @@ if (argv.h || argv.help || (!fromStdin && argv._.length == 0)) {
 
 if (options.source) {
   fs.readFile(options.source, 'utf8', function(error, text) {
-    if (error) throw error;
+    if (error)
+      throw error;
     enhance(text, output);
   });
 } else {
@@ -60,7 +68,8 @@ function enhance(source, callback) {
     pregzip: options.pregzip,
     stamp: options.stamp
   }).process(source, function(error, data) {
-    if (error) throw error;
+    if (error)
+      throw error;
     callback(data);
   });
 }
@@ -79,8 +88,8 @@ function write(target, content) {
 function output(enhanced) {
   if (options.target) {
     write(options.target, enhanced.embedded);
-   if (options.noEmbed)
-     write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
+  if (options.noEmbed)
+    write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
   } else {
     write(process.stdout, enhanced.embedded);
   }

@@ -3,10 +3,10 @@
   "author": "Jakub Pawlowicz <jakub@goalsmashers.com> (http://twitter.com/GoalSmashers)",
   "description": "A well-tested CSS enhancer (Base64, assets hosts, cache boosters, etc)",
   "keywords": ["css", "enhance", "base64", "assets", "asset hosts"],
-  "homepage": "http://github.com/GoalSmashers/enhance-css",
+  "homepage": "https://github.com/GoalSmashers/enhance-css",
   "repository": {
     "type" : "git",
-    "url" : "http://github.com/GoalSmashers/enhance-css.git"
+    "url" : "https://github.com/GoalSmashers/enhance-css.git"
   },
   "version": "0.6.0",
   "main": "index.js",
@@ -14,13 +14,16 @@
     "enhancecss": "./bin/enhancecss"
   },
   "scripts": {
-    "test": "node_modules/.bin/vows test/*-test.js"
+    "check": "jshint .",
+    "prepublish": "jshint .",
+    "test": "vows"
   },
   "dependencies": {
     "optimist": "0.3.x"
   },
   "devDependencies": {
-    "vows": "0.6.x"
+    "vows": "0.7.x",
+    "jshint": "1.1.x"
   },
   "engines": {
     "node": ">=0.6.0"

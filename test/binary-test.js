@@ -49,7 +49,8 @@ var cleanup = function(no, callback) {
   fs.unlink('/tmp/test' + no + '.css.gz');
   fs.unlink('/tmp/test' + no + '-noembed.css.gz');
 
-  if (callback) callback();
+  if (callback)
+    callback();
 };
 
 var binaryContext = function(options, context) {
