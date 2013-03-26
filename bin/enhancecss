@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var argv = require('optimist').argv,
-  EnhanceCSS = require('../index'),
-  fs = require('fs'),
-  path = require('path'),
-  util = require('util');
+var argv = require('optimist').argv;
+var EnhanceCSS = require('../index');
+var fs = require('fs');
+var path = require('path');
+var util = require('util');
 
 var options = {
   source: null,

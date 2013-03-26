@@ -1,13 +1,13 @@
-var vows = require('vows'),
-  assert = require('assert'),
-  fs = require('fs'),
-  zlib = require('zlib'),
-  path = require('path'),
-  exec = require('child_process').exec,
-  crypto = require('crypto'),
-  exists = fs.exists || path.exists,
-  existsSync = fs.existsSync || path.existsSync,
-  EnhanceCSS = require('../lib/enhance.js');
+var vows = require('vows');
+var assert = require('assert');
+var fs = require('fs');
+var zlib = require('zlib');
+var path = require('path');
+var exec = require('child_process').exec;
+var crypto = require('crypto');
+var exists = fs.exists || path.exists;
+var existsSync = fs.existsSync || path.existsSync;
+var EnhanceCSS = require('../lib/enhance.js');
 
 var append = function(o1, o2) {
   for (var k in o2)
@@ -216,8 +216,8 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true, noEmbedVersion: true }),
     'once file exists': {
       topic: function(css) {
-        var self = this,
-          stamp = cryptedStamp('gradient.png');
+        var self = this;
+        var stamp = cryptedStamp('gradient.png');
 
         exists(process.cwd() + '/test/data/gradient-' + stamp + '.png', function() {
           self.callback(css, stamp);
@@ -239,8 +239,8 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true, noEmbedVersion: true }),
     'once file exists': {
       topic: function(css) {
-        var self = this,
-          stamp = cryptedStamp('gradient.png');
+        var self = this;
+        var stamp = cryptedStamp('gradient.png');
 
         exists(process.cwd() + '/test/data/gradient-' + stamp + '.png', function() {
           self.callback(css, stamp);

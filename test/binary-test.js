@@ -1,10 +1,10 @@
-var vows = require('vows'),
-  assert = require('assert'),
-  fs = require('fs'),
-  path = require('path'),
-  exec = require('child_process').exec,
-  zlib = require('zlib'),
-  existsSync = fs.existsSync || path.existsSync;
+var vows = require('vows');
+var assert = require('assert');
+var fs = require('fs');
+var path = require('path');
+var exec = require('child_process').exec;
+var zlib = require('zlib');
+var existsSync = fs.existsSync || path.existsSync;
 
 var isWindows = process.platform == 'win32';
 
