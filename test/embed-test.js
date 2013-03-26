@@ -53,13 +53,13 @@ vows.describe('embedding images').addBatch({
     }
   },
   'urls with special characters #1': {
-    topic: runOn("a{background:url(\"/test/data/gradient.jpg\");}"),
+    topic: runOn('a{background:url("/test/data/gradient.jpg");}'),
     'should be processed': function(data) {
       assert.equal(data.embedded.plain, 'a{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ');}');
     }
   },
   'urls with special characters #2': {
-    topic: runOn("a{background:url('/test/data/gradient.jpg');}"),
+    topic: runOn('a{background:url("/test/data/gradient.jpg");}'),
     'should be processed': function(data) {
       assert.equal(data.embedded.plain, 'a{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ');}');
     }
@@ -71,7 +71,7 @@ vows.describe('embedding images').addBatch({
     }
   },
   'same urls with mixed characters': {
-    topic: runOn("a{background:url('/test/data/gradient.jpg?embed');} div{background:url(/test/data/gradient.jpg?embed);}"),
+    topic: runOn('a{background:url("/test/data/gradient.jpg?embed");} div{background:url(/test/data/gradient.jpg?embed);}'),
     'should not be embedded': function(data) {
       assert.equal(data.embedded.plain,
         'a{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ');} ' +
@@ -95,16 +95,16 @@ vows.describe('embedding images').addBatch({
       return function(type) { return 'a{background:url(/test/data/gradient.' + type + '?embed)}'; };
     },
     'should give Base64 embedded jpg': function(css) {
-      assert.equal(runOn(css('jpg'))().embedded.plain, "a{background:url(data:image/jpeg;base64," + base64('gradient.jpg') + ")}");
+      assert.equal(runOn(css('jpg'))().embedded.plain, 'a{background:url(data:image/jpeg;base64,' + base64('gradient.jpg') + ')}');
     },
     'should give Base64 embedded png': function(css) {
-      assert.equal(runOn(css('png'))().embedded.plain, "a{background:url(data:image/png;base64," + base64('gradient.png') + ")}");
+      assert.equal(runOn(css('png'))().embedded.plain, 'a{background:url(data:image/png;base64,' + base64('gradient.png') + ')}');
     },
     'should give Base64 embedded gif': function(css) {
-      assert.equal(runOn(css('gif'))().embedded.plain, "a{background:url(data:image/gif;base64," + base64('gradient.gif') + ")}");
+      assert.equal(runOn(css('gif'))().embedded.plain, 'a{background:url(data:image/gif;base64,' + base64('gradient.gif') + ')}');
     },
     'should give Base64 embedded svg': function(css) {
-      assert.equal(runOn(css('svg'))().embedded.plain, "a{background:url(data:image/svg+xml;base64," + base64('gradient.svg') + ")}");
+      assert.equal(runOn(css('svg'))().embedded.plain, 'a{background:url(data:image/svg+xml;base64,' + base64('gradient.svg') + ')}');
     }
   },
   'more than one file marked with ?embed': {
@@ -205,10 +205,10 @@ vows.describe('embedding images').addBatch({
     },
     'should include stamped file in embed source': function(css) {
       var stamp = cryptedStamp('gradient.png');
-      assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+      assert.equal('a{background:url(/test/data/gradient-' + stamp + '.png)}', css.embedded.plain);
     },
     teardown: function() {
-      exec("rm -rf test/data/gradient-*");
+      exec('rm -rf test/data/gradient-*');
     }
   }
 }).addBatch({
@@ -224,14 +224,14 @@ vows.describe('embedding images').addBatch({
         });
       },
       'should include stamped file in embed source': function(css, stamp) {
-        assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+        assert.equal('a{background:url(/test/data/gradient-' + stamp + '.png)}', css.embedded.plain);
       },
       'should include stamped file in non-embedded source': function(css, stamp) {
-        assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+        assert.equal('a{background:url(/test/data/gradient-' + stamp + '.png)}', css.notEmbedded.plain);
       }
     },
     teardown: function() {
-      exec("rm -rf test/data/gradient-*");
+      exec('rm -rf test/data/gradient-*');
     }
   }
 }).addBatch({
@@ -247,14 +247,14 @@ vows.describe('embedding images').addBatch({
         });
       },
       'should not include stamped file in embed source': function(css, stamp) {
-        assert.notEqual("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.embedded.plain);
+        assert.notEqual('a{background:url(/test/data/gradient-' + stamp + '.png)}', css.embedded.plain);
       },
       'should include stamped file in non-embedded source': function(css, stamp) {
-        assert.equal("a{background:url(/test/data/gradient-" + stamp + ".png)}", css.notEmbedded.plain);
+        assert.equal('a{background:url(/test/data/gradient-' + stamp + '.png)}', css.notEmbedded.plain);
       }
     },
     teardown: function() {
-      exec("rm -rf test/data/gradient-*");
+      exec('rm -rf test/data/gradient-*');
     }
   }
 }).addBatch({
@@ -266,23 +266,23 @@ vows.describe('embedding images').addBatch({
     },
     'should include stamped file in embed source': function(css) {
       var stamp = cryptedStamp('gradient.png');
-      assert.equal("a{background:url(/test/data/gradient.special-" + stamp + ".png)}", css.embedded.plain);
+      assert.equal('a{background:url(/test/data/gradient.special-' + stamp + '.png)}', css.embedded.plain);
     },
     teardown: function() {
-      exec("rm -rf test/data/gradient.special-*");
+      exec('rm -rf test/data/gradient.special-*');
     }
   }
 }).addBatch({
   'should correctly process missing files with embed': {
     topic: runOn('a{background:url(/test/data/gradient2.png?embed)}', { cryptedStamp: true }),
     'should keep path as is': function(css) {
-      assert.equal("a{background:url(/test/data/gradient2.png?embed)}", css.embedded.plain);
+      assert.equal('a{background:url(/test/data/gradient2.png?embed)}', css.embedded.plain);
     }
   },
   'should correctly process missing files for crypted stamps': {
     topic: runOn('a{background:url(/test/data/gradient2.png)}', { cryptedStamp: true }),
     'should keep path as is': function(css) {
-      assert.equal("a{background:url(/test/data/gradient2.png)}", css.embedded.plain);
+      assert.equal('a{background:url(/test/data/gradient2.png)}', css.embedded.plain);
     }
   }
 }).addBatch({
