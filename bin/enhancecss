@@ -75,7 +75,7 @@ function enhance(source, callback) {
 }
 
 function write(target, content) {
-  if (typeof target == "string") {
+  if (typeof target == 'string') {
     fs.writeFileSync(target, content.plain);
 
     if (options.pregzip)

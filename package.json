@@ -1,18 +1,24 @@
 {
   "name": "enhance-css",
+  "version": "0.6.0",
   "author": "Jakub Pawlowicz <jakub@goalsmashers.com> (http://twitter.com/GoalSmashers)",
   "description": "A well-tested CSS enhancer (Base64, assets hosts, cache boosters, etc)",
-  "keywords": ["css", "enhance", "base64", "assets", "asset hosts"],
+  "keywords": [
+    "css",
+    "enhance",
+    "base64",
+    "assets",
+    "asset hosts"
+  ],
   "homepage": "https://github.com/GoalSmashers/enhance-css",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/GoalSmashers/enhance-css.git"
+    "type": "git",
+    "url": "https://github.com/GoalSmashers/enhance-css.git"
   },
-  "version": "0.6.0",
-  "main": "index.js",
   "bin": {
     "enhancecss": "./bin/enhancecss"
   },
+  "main": "index.js",
   "scripts": {
     "check": "jshint .",
     "prepublish": "jshint .",
@@ -27,5 +33,7 @@
   },
   "engines": {
     "node": ">=0.6.0"
-  }
+  },
+  "readmeFilename": "Readme.md",
+  "license": "MIT"
 }
