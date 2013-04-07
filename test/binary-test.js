@@ -90,12 +90,12 @@ vows.describe('enhance css binary').addBatch({
       assert.equal(stdout, version + '\n');
     }
   }),
-  'simple embed': pipelinedContext('-o /tmp/test1.css', {
+  'simple embed': pipelinedContext('-o /tmp/test.css', {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
     'should create valid files': function() {
-      checkFiles('test1', { noEmbed: false, pregzip: false });
+      checkFiles('test', { noEmbed: false, pregzip: false });
     },
     teardown: cleanup(1)
   }),
