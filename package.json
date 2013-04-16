@@ -25,7 +25,7 @@
     "test": "vows"
   },
   "dependencies": {
-    "optimist": "0.3.x"
+    "optimist": "0.4.x"
   },
   "devDependencies": {
     "vows": "0.7.x",
