@@ -15,6 +15,9 @@
     "type": "git",
     "url": "https://github.com/GoalSmashers/enhance-css.git"
   },
+  "bugs": {
+    "url": "https://github.com/GoalSmashers/enhance-css/issues"
+  },
   "bin": {
     "enhancecss": "./bin/enhancecss"
   },
@@ -25,11 +28,11 @@
     "test": "vows"
   },
   "dependencies": {
-    "optimist": "0.3.x"
+    "optimist": "0.5.x"
   },
   "devDependencies": {
     "vows": "0.7.x",
-    "jshint": "1.1.x"
+    "jshint": "2.1.x"
   },
   "engines": {
     "node": ">=0.6.0"
