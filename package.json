@@ -15,6 +15,9 @@
     "type": "git",
     "url": "https://github.com/GoalSmashers/enhance-css.git"
   },
+  "bugs": {
+    "url": "https://github.com/GoalSmashers/enhance-css/issues"
+  },
   "bin": {
     "enhancecss": "./bin/enhancecss"
   },
