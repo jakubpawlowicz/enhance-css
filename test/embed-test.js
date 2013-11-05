@@ -7,18 +7,12 @@ var exec = require('child_process').exec;
 var crypto = require('crypto');
 var EnhanceCSS = require('../lib/enhance.js');
 
-var append = function(o1, o2) {
-  for (var k in o2)
-    o1[k] = o2[k];
-  return o1;
-};
-
-var runOn = function(css, extraOptions) {
-  if (!extraOptions)
-    extraOptions = {};
+var runOn = function(css, options) {
+  options = options || {};
+  options.rootPath = options.rootPath || process.cwd();
 
   return function() {
-    return new EnhanceCSS(append({ rootPath: process.cwd() }, extraOptions)).process(css, this.callback);
+    return new EnhanceCSS(options).process(css, this.callback);
   };
 };
 
