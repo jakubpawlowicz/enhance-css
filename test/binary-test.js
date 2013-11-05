@@ -42,10 +42,12 @@ var checkFiles = function(fileName, options) {
 };
 
 var cleanup = function(no, callback) {
-  fs.unlink('/tmp/test' + no + '.css');
-  fs.unlink('/tmp/test' + no + '-noembed.css');
-  fs.unlink('/tmp/test' + no + '.css.gz');
-  fs.unlink('/tmp/test' + no + '-noembed.css.gz');
+  var swallowErrors = function() {};
+
+  fs.unlink('/tmp/test' + no + '.css', swallowErrors);
+  fs.unlink('/tmp/test' + no + '-noembed.css', swallowErrors);
+  fs.unlink('/tmp/test' + no + '.css.gz', swallowErrors);
+  fs.unlink('/tmp/test' + no + '-noembed.css.gz', swallowErrors);
 
   if (callback)
     callback();
