@@ -1,10 +1,8 @@
 var vows = require('vows');
 var assert = require('assert');
 var fs = require('fs');
-var path = require('path');
 var exec = require('child_process').exec;
 var zlib = require('zlib');
-var existsSync = fs.existsSync || path.existsSync;
 
 var isWindows = process.platform == 'win32';
 
@@ -15,10 +13,10 @@ var checkFiles = function(fileName, options) {
     return '/tmp/' + fileName + (noEmbed ? '-noembed' : '') + '.css' + (pregzip ? '.gz' : '');
   };
 
-  assert.equal(existsSync(pathToFile()), true);
-  assert.equal(existsSync(pathToFile(true)), !!options.noEmbed);
-  assert.equal(existsSync(pathToFile(false, true)), !!options.pregzip);
-  assert.equal(existsSync(pathToFile(true, true)), !!(options.pregzip && options.noEmbed));
+  assert.equal(fs.existsSync(pathToFile()), true);
+  assert.equal(fs.existsSync(pathToFile(true)), !!options.noEmbed);
+  assert.equal(fs.existsSync(pathToFile(false, true)), !!options.pregzip);
+  assert.equal(fs.existsSync(pathToFile(true, true)), !!(options.pregzip && options.noEmbed));
 
   // verify content
   assert.include(fs.readFileSync(pathToFile()).toString('utf8'), 'a{background:url(data:image/png;base64');
@@ -139,7 +137,7 @@ vows.describe('enhance css binary').addBatch({
       stamp.update(data.toString('utf8'));
       var cryptedStamp = stamp.digest('hex');
 
-      assert.equal(existsSync(process.cwd() + '/test/data/gradient-' + cryptedStamp + '.png'), true);
+      assert.equal(fs.existsSync(process.cwd() + '/test/data/gradient-' + cryptedStamp + '.png'), true);
     },
     teardown: cleanup(4, function() {
       exec('rm -rf ' + process.cwd() + '/test/data/gradient-*.png');

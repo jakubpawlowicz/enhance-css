@@ -20,8 +20,7 @@ for older browsers (IE 7 and below).
 ### What are the requirements?
 
 ```
-node.js 0.6.0+ on UN*X (fully tested on OS X 10.6+ and CentOS)
-node.js 0.8.0+ on Windows
+node.js 0.8.0+ (fully tested on OS X 10.6+, CentOS, and Windows 7)
 ```
 
 ### How to install enhance-css?
