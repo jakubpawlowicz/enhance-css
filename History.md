@@ -1,3 +1,9 @@
+1.0.0 / 2013-xx-xx (UNRELEASED)
+==================
+
+* Adds a slightly different CLI options (because of #10).
+* Fixes #10 - use commander for CLI options parsing.
+
 0.6.0 / 2012-11-30
 ==================
 

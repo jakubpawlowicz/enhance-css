@@ -1,50 +1,45 @@
 #!/usr/bin/env node
 
-var argv = require('optimist').argv;
+var commands = require('commander');
 var EnhanceCSS = require('../index');
 var fs = require('fs');
 var path = require('path');
 var util = require('util');
 
+var packageConfig = fs.readFileSync(path.join(path.dirname(fs.realpathSync(process.argv[1])), '../package.json'));
+var buildVersion = JSON.parse(packageConfig).version;
+
+// Specify commander options to parse command line params correctly
+commands
+  .version(buildVersion, '-v, --version')
+  .usage('[options] [source-file]')
+  .option('-r, --root [root-path]', 'Set a root path to which resolve absolute @import rules')
+  .option('-o, --output [output-file]', 'Use [output-file] as output instead of STDOUT')
+  .option('--crypted-stamp', 'Rename image files with MD5 hash attached (hard cache boosters)')
+  .option('--no-stamp', 'Disable adding stamp to URLs')
+  .option('--no-embed-version', 'Output both embedded and non embedded version')
+  .option('--asset-hosts [host-pattern]', 'Use one or more asset hosts, e.g assets[0,1,2].example.com')
+  .option('--pregzip', 'Automatically gzip the enhanced files (not available when no output file given)')
+  .parse(process.argv);
+
+var fromStdin = !process.env['__DIRECT__'] && !process.stdin.isTTY;
+
+// If no sensible data passed in just print help and exit
+if (!fromStdin && commands.args.length == 0) {
+  commands.outputHelp();
+  return 0;
+}
+
 var options = {
-  source: null,
-  target: null,
-  rootPath: null,
-  assetHosts: null,
-  pregzip: false,
-  noEmbed: false,
-  cryptedStamp: false,
-  stamp: true
+  source: commands.args[0],
+  target: commands.output,
+  rootPath: commands.root || process.cwd(),
+  assetHosts: !!commands.assetHosts,
+  pregzip: !!commands.pregzip,
+  noEmbedVersion: !commands.embedVersion,
+  cryptedStamp: !!commands.cryptedStamp,
+  stamp: !!commands.stamp
 };
-var fromStdin = !process.env['__DIRECT__'] && process.stdin.readable;
-
-if (argv.noembedversion)
-  options.noEmbed = true;
-if (argv.assethosts)
-  options.assetHosts = argv.assethosts;
-if (argv.pregzip)
-  options.pregzip = true;
-if (argv.cryptedstamp)
-  options.cryptedStamp = true;
-if (argv.o)
-  options.target = argv.o;
-if (argv._)
-  options.source = argv._[0];
-if (argv.nostamp)
-  options.stamp = false;
-
-options.rootPath = argv.root || process.cwd();
-
-if (argv.v) {
-  var packageConfig = fs.readFileSync(path.join(path.dirname(fs.realpathSync(process.argv[1])), '../package.json'));
-  util.puts(JSON.parse(packageConfig).version);
-  return 0;
-}
-
-if (argv.h || argv.help || (!fromStdin && argv._.length == 0)) {
-  util.print('usage: enhancecss -o <output-file> [--cryptedstamp] [--noembedversion] [--assethosts <host-pattern>] [--root <root-path>] [--pregzip <input-file>]\n');
-  return 0;
-}
 
 if (options.source) {
   fs.readFile(options.source, 'utf8', function(error, text) {
@@ -61,15 +56,10 @@ if (options.source) {
 }
 
 function enhance(source, callback) {
-  return new EnhanceCSS({ rootPath: options.rootPath,
-    assetHosts: options.assetHosts,
-    noEmbedVersion: options.noEmbed,
-    cryptedStamp: options.cryptedStamp,
-    pregzip: options.pregzip,
-    stamp: options.stamp
-  }).process(source, function(error, data) {
+  return new EnhanceCSS(options).process(source, function(error, data) {
     if (error)
       throw error;
+
     callback(data);
   });
 }
@@ -88,8 +78,8 @@ function write(target, content) {
 function output(enhanced) {
   if (options.target) {
     write(options.target, enhanced.embedded);
-  if (options.noEmbed)
-    write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
+    if (options.noEmbedVersion)
+      write(options.target.replace(/\.(\w+)$/, '-noembed.$1'), enhanced.notEmbedded);
   } else {
     write(process.stdout, enhanced.embedded);
   }

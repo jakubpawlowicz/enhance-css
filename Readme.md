@@ -33,14 +33,17 @@ npm install enhance-css
 ### How to use enhance-css CLI?
 
 ```
-enhancecss -o <output-file> <source-file>
+enhancecss [options] [source-file]
 
---cryptedstamp                  Rename image files with MD5 hash attached (hard cache boosters)
---noembedversion                Output the bundled CSS and the non embedded version
---assethosts <host-pattern>     Use one or more asset hosts
---root <root-path>              Locate images referenced in the css files
---pregzip <input-file>          Automatically gzip the enhanced files (not available when output is set to STDOUT)
--o [output-file]                Use [output-file] as output instead of STDOUT
+-h, --help                    output usage information
+-v, --version                 output the version number
+-r, --root [root-path]        Set a root path to which resolve absolute @import rules
+-o, --output [output-file]    Use [output-file] as output instead of STDOUT
+--crypted-stamp               Rename image files with MD5 hash attached (hard cache boosters)
+--no-stamp                    Disable adding stamp to URLs
+--no-embed-version            Output both embedded and non embedded version
+--asset-hosts [host-pattern]  Use one or more asset hosts, e.g assets[0,1,2].example.com
+--pregzip                     Automatically gzip the enhanced files (not available when no output file given)
 ```
 
 #### Examples:

@@ -76,12 +76,12 @@ var pipelinedContext = function(options, context) {
 vows.describe('enhance css binary').addBatch({
   'no option': binaryContext('', {
     'should give usage info': function(error, stdout) {
-      assert.equal(0, stdout.indexOf('usage:'));
+      assert.notEqual(-1, stdout.indexOf('Usage:'));
     }
   }),
   'help option': binaryContext('-h', {
     'should give usage info': function(error, stdout) {
-      assert.equal(0, stdout.indexOf('usage:'));
+      assert.notEqual(-1, stdout.indexOf('Usage:'));
     }
   }),
   'version option': binaryContext('-v', {
@@ -99,7 +99,7 @@ vows.describe('enhance css binary').addBatch({
     },
     teardown: cleanup(1)
   }),
-  'simple embed with no stamps': pipelinedContext('--noembedversion --nostamp -o /tmp/test1.css', {
+  'simple embed with no stamps': pipelinedContext('--no-embed-version --no-stamp -o /tmp/test1.css', {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -108,7 +108,7 @@ vows.describe('enhance css binary').addBatch({
     },
     teardown: cleanup(1)
   }),
-  'embed with --noembedversion option': pipelinedContext('--noembedversion -o /tmp/test2.css', {
+  'embed with --no-embed-version option': pipelinedContext('--no-embed-version -o /tmp/test2.css', {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -117,7 +117,7 @@ vows.describe('enhance css binary').addBatch({
     },
     teardown: cleanup(2)
   }),
-  'embed with noembed and gzip': pipelinedContext('--noembedversion --pregzip -o /tmp/test3.css', {
+  'embed with noembed and gzip': pipelinedContext('--no-embed-version --pregzip -o /tmp/test3.css', {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
@@ -126,7 +126,7 @@ vows.describe('enhance css binary').addBatch({
     },
     teardown: cleanup(3)
   }),
-  'noembed and crypted stamp options': pipelinedContext('--cryptedstamp --noembedversion -o /tmp/test4.css', {
+  'noembed and crypted stamp options': pipelinedContext('--crypted-stamp --no-embed-version -o /tmp/test4.css', {
     'should give empty output': function(error, stdout) {
       assert.isEmpty(stdout);
     },
