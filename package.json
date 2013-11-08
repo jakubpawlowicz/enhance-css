@@ -23,8 +23,8 @@
   },
   "main": "index.js",
   "scripts": {
-    "check": "jshint .",
-    "prepublish": "jshint .",
+    "check": "jshint ./bin/enhancecss .",
+    "prepublish": "npm run check",
     "test": "vows"
   },
   "dependencies": {

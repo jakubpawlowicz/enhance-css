@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
+/* jshint latedef: false */
+
 var commands = require('commander');
 var EnhanceCSS = require('../index');
 var fs = require('fs');
 var path = require('path');
-var util = require('util');
 
 var packageConfig = fs.readFileSync(path.join(path.dirname(fs.realpathSync(process.argv[1])), '../package.json'));
 var buildVersion = JSON.parse(packageConfig).version;
@@ -22,10 +23,10 @@ commands
   .option('--pregzip', 'Automatically gzip the enhanced files (not available when no output file given)')
   .parse(process.argv);
 
-var fromStdin = !process.env['__DIRECT__'] && !process.stdin.isTTY;
+var fromStdin = !process.env.__DIRECT__ && !process.stdin.isTTY;
 
 // If no sensible data passed in just print help and exit
-if (!fromStdin && commands.args.length == 0) {
+if (!fromStdin && commands.args.length === 0) {
   commands.outputHelp();
   return 0;
 }
@@ -83,4 +84,4 @@ function output(enhanced) {
   } else {
     write(process.stdout, enhanced.embedded);
   }
-};
+}
