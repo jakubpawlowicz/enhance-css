@@ -1,17 +1,21 @@
 {
-  "node" : true,
   "browser" : false,
+  "node" : true,
 
   "camelcase": true,
   "curly": false,
   "eqeqeq": false,
+  "eqnull": false,
+  "immed": true,
   "indent": 2,
   "latedef": true,
   "multistr": true,
   "noarg": true,
   "plusplus": false,
+  "quotmark": "single",
   "regexp": true,
   "strict": false,
   "trailing": true,
+  "undef": true,
   "unused": true
 }

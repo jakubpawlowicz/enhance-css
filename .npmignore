@@ -1,0 +1,4 @@
+.jshintignore
+.jshintrc
+.travis.yml
+test

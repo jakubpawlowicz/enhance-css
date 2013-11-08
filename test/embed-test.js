@@ -428,7 +428,7 @@ vows.describe('embedding images').addBatch({
     'should exists': function(parsed) {
       assert.isTrue(parsed.exists);
     }
-  },
+  }
 }).addBatch({
   'get empty asset host': {
     topic: new EnhanceCSS({}).nextAssetHost(),
