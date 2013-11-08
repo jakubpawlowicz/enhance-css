@@ -23,6 +23,13 @@
     "enhancecss": "./bin/enhancecss"
   },
   "main": "index.js",
+  "files": [
+    "bin",
+    "lib",
+    "History.md",
+    "index.js",
+    "LICENSE"
+  ],
   "scripts": {
     "check": "jshint ./bin/enhancecss .",
     "prepublish": "npm run check",
