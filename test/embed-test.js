@@ -84,7 +84,9 @@ vows.describe('embedding images').addBatch({
   },
   'one file to be embedded': {
     topic: function() {
-      return function(type) { return 'a{background:url(/test/data/gradient.' + type + '?embed)}'; };
+      return function(type) {
+        return 'a{background:url(/test/data/gradient.' + type + '?embed)}';
+      };
     },
     'should give Base64 embedded jpg': function(css) {
       assert.equal(runOn(css('jpg'))().embedded.plain, 'a{background:url(data:image/jpeg;base64,' + base64('gradient.jpg') + ')}');
@@ -110,10 +112,11 @@ vows.describe('embedding images').addBatch({
   'more than one file and only one marked with ?embed': {
     topic: runOn('a{background:url(/test/data/gradient.png)} div{background:url(/test/data/gradient.png?embed)} p{border-image:url(/test/data/gradient.png)}'),
     'should embed one file to Base64': function(data) {
-      assert.equal(data.embedded.plain,
-        ['a{background:url(/test/data/gradient.png?' + mtime('gradient.png') + ')}',
-         'div{background:url(data:image/png;base64,' + base64('gradient.png') + ')}',
-         'p{border-image:url(/test/data/gradient.png?' + mtime('gradient.png') + ')}'].join(' '));
+      assert.equal(data.embedded.plain, [
+        'a{background:url(/test/data/gradient.png?' + mtime('gradient.png') + ')}',
+        'div{background:url(data:image/png;base64,' + base64('gradient.png') + ')}',
+        'p{border-image:url(/test/data/gradient.png?' + mtime('gradient.png') + ')}'
+      ].join(' '));
     }
   },
   'not embedded files': {
@@ -132,18 +135,18 @@ vows.describe('embedding images').addBatch({
   'adding assets hosts': {
     topic: 'a{background:url(/test/data/gradient.png)} p{background:url(/test/data/gradient.jpg)} div{background:url(/test/data/gradient.gif)}',
     'single': function(css) {
-      assert.equal(runOn(css, { assetHosts: 'assets.example.com' })().embedded.plain,
-        ['a{background:url(//assets.example.com/test/data/gradient.png?' + mtime('gradient.png') + ')}',
-         'p{background:url(//assets.example.com/test/data/gradient.jpg?' + mtime('gradient.jpg') + ')}',
-         'div{background:url(//assets.example.com/test/data/gradient.gif?' + mtime('gradient.gif') + ')}'].join(' ')
-      );
+      assert.equal(runOn(css, { assetHosts: 'assets.example.com' })().embedded.plain, [
+        'a{background:url(//assets.example.com/test/data/gradient.png?' + mtime('gradient.png') + ')}',
+        'p{background:url(//assets.example.com/test/data/gradient.jpg?' + mtime('gradient.jpg') + ')}',
+        'div{background:url(//assets.example.com/test/data/gradient.gif?' + mtime('gradient.gif') + ')}'
+      ].join(' '));
     },
     'multiple': function(css) {
-      assert.equal(runOn(css, { assetHosts: 'assets[0,1,2].example.com' })().embedded.plain,
-        ['a{background:url(//assets0.example.com/test/data/gradient.png?' + mtime('gradient.png') + ')}',
-         'p{background:url(//assets1.example.com/test/data/gradient.jpg?' + mtime('gradient.jpg') + ')}',
-         'div{background:url(//assets2.example.com/test/data/gradient.gif?' + mtime('gradient.gif') + ')}'].join(' ')
-      );
+      assert.equal(runOn(css, { assetHosts: 'assets[0,1,2].example.com' })().embedded.plain, [
+        'a{background:url(//assets0.example.com/test/data/gradient.png?' + mtime('gradient.png') + ')}',
+        'p{background:url(//assets1.example.com/test/data/gradient.jpg?' + mtime('gradient.jpg') + ')}',
+        'div{background:url(//assets2.example.com/test/data/gradient.gif?' + mtime('gradient.gif') + ')}'
+      ].join(' '));
     }
   }
 })
@@ -205,7 +208,10 @@ vows.describe('embedding images').addBatch({
   }
 }).addBatch({
   'should add crypted stamp instead of timestamp on non-embedded source': {
-    topic: runOn('a{background:url(/test/data/gradient.png)}', { cryptedStamp: true, noEmbedVersion: true }),
+    topic: runOn('a{background:url(/test/data/gradient.png)}', {
+      cryptedStamp: true,
+      noEmbedVersion: true
+    }),
     'once file exists': {
       topic: function(css) {
         var self = this;
@@ -228,7 +234,10 @@ vows.describe('embedding images').addBatch({
   }
 }).addBatch({
   'should add crypted stamp instead of timestamp on non-embedded source for embedded image': {
-    topic: runOn('a{background:url(/test/data/gradient.png?embed)}', { cryptedStamp: true, noEmbedVersion: true }),
+    topic: runOn('a{background:url(/test/data/gradient.png?embed)}', {
+      cryptedStamp: true,
+      noEmbedVersion: true
+    }),
     'once file exists': {
       topic: function(css) {
         var self = this;
@@ -305,7 +314,10 @@ vows.describe('embedding images').addBatch({
     }
   },
   'compressed non-embedded content': {
-    topic: runOn('a{background:#fff}', { pregzip: true, noEmbedVersion: true}),
+    topic: runOn('a{background:#fff}', {
+      pregzip: true,
+      noEmbedVersion: true
+    }),
     'should be buffer': function(data) {
       assert.ok(Buffer.isBuffer(data.notEmbedded.compressed));
     },
@@ -432,7 +444,9 @@ vows.describe('embedding images').addBatch({
 }).addBatch({
   'get empty asset host': {
     topic: new EnhanceCSS({}).nextAssetHost(),
-    'from empty configuration': function(host) { assert.equal(host, null); }
+    'from empty configuration': function(host) {
+      assert.equal(host, null);
+    }
   },
   'get single asset host fixed with': {
     topic: new EnhanceCSS({ assetHosts: 'assets.example.com' }).nextAssetHost(),
@@ -440,23 +454,26 @@ vows.describe('embedding images').addBatch({
       assert.equal(host, '//assets.example.com');
     }
   },
-  'get single asset host not fixed if': [{
-    topic: new EnhanceCSS({ assetHosts: '//assets.example.com' }).nextAssetHost(),
-    'relative protocol passed': function(host) {
-      assert.equal(host, '//assets.example.com');
+  'get single asset host not fixed if': [
+    {
+      topic: new EnhanceCSS({ assetHosts: '//assets.example.com' }).nextAssetHost(),
+      'relative protocol passed': function(host) {
+        assert.equal(host, '//assets.example.com');
+      }
+    },
+    {
+      topic: new EnhanceCSS({ assetHosts: 'http://assets.example.com' }).nextAssetHost(),
+      '"http" protocol passed': function(host) {
+        assert.equal(host, 'http://assets.example.com');
+      }
+    },
+    {
+      topic: new EnhanceCSS({ assetHosts: 'https://assets.example.com' }).nextAssetHost(),
+      '"https" protocol passed': function(host) {
+        assert.equal(host, 'https://assets.example.com');
+      }
     }
-  }, {
-    topic: new EnhanceCSS({ assetHosts: 'http://assets.example.com' }).nextAssetHost(),
-    '"http" protocol passed': function(host) {
-      assert.equal(host, 'http://assets.example.com');
-    }
-  }, {
-    topic: new EnhanceCSS({ assetHosts: 'https://assets.example.com' }).nextAssetHost(),
-    '"https" protocol passed': function(host) {
-      assert.equal(host, 'https://assets.example.com');
-    }
-  }],
-
+  ],
   'get multiple asset hosts fixed with': {
     topic: function() {
       return new EnhanceCSS({ assetHosts: 'assets[0,1].example.com' });
@@ -468,38 +485,41 @@ vows.describe('embedding images').addBatch({
       assert.equal(enhance.nextAssetHost(), '//assets1.example.com');
     }
   },
-  'get multiple asset hosts not fixed if': [{
-    topic: function() {
-      return new EnhanceCSS({ assetHosts: '//assets[0,1].example.com' });
+  'get multiple asset hosts not fixed if': [
+    {
+      topic: function() {
+        return new EnhanceCSS({ assetHosts: '//assets[0,1].example.com' });
+      },
+      'relative protocol passed, for first in list': function(enhance) {
+        assert.equal(enhance.nextAssetHost(), '//assets0.example.com');
+      },
+      'relative protocol passed, for second in list': function(enhance) {
+        assert.equal(enhance.nextAssetHost(), '//assets1.example.com');
+      }
     },
-    'relative protocol passed, for first in list': function(enhance) {
-      assert.equal(enhance.nextAssetHost(), '//assets0.example.com');
+    {
+      topic: function() {
+        return new EnhanceCSS({ assetHosts: 'http://assets[0,1].example.com' });
+      },
+      '"http" protocol passed, for first in list': function(enhance) {
+        assert.equal(enhance.nextAssetHost(), 'http://assets0.example.com');
+      },
+      '"http" protocol passed, for second in list': function(enhance) {
+        assert.equal(enhance.nextAssetHost(), 'http://assets1.example.com');
+      }
     },
-    'relative protocol passed, for second in list': function(enhance) {
-      assert.equal(enhance.nextAssetHost(), '//assets1.example.com');
+    {
+      topic: function() {
+        return new EnhanceCSS({ assetHosts: 'https://assets[0,1].example.com' });
+      },
+      '"https" protocol passed, for first in list': function(enhance) {
+        assert.equal(enhance.nextAssetHost(), 'https://assets0.example.com');
+      },
+      '"https" protocol passed, for second in list': function(enhance) {
+        assert.equal(enhance.nextAssetHost(), 'https://assets1.example.com');
+      }
     }
-  }, {
-    topic: function() {
-      return new EnhanceCSS({ assetHosts: 'http://assets[0,1].example.com' });
-    },
-    '"http" protocol passed, for first in list': function(enhance) {
-      assert.equal(enhance.nextAssetHost(), 'http://assets0.example.com');
-    },
-    '"http" protocol passed, for second in list': function(enhance) {
-      assert.equal(enhance.nextAssetHost(), 'http://assets1.example.com');
-    }
-  }, {
-    topic: function() {
-      return new EnhanceCSS({ assetHosts: 'https://assets[0,1].example.com' });
-    },
-    '"https" protocol passed, for first in list': function(enhance) {
-      assert.equal(enhance.nextAssetHost(), 'https://assets0.example.com');
-    },
-    '"https" protocol passed, for second in list': function(enhance) {
-      assert.equal(enhance.nextAssetHost(), 'https://assets1.example.com');
-    }
-  }],
-
+  ],
   'get one asset host': {
     topic: new EnhanceCSS({ assetHosts: '//assets.example.com' }).nextAssetHost(),
     'as first host from list': function(host) {
@@ -545,7 +565,10 @@ vows.describe('embedding images').addBatch({
   }
 }).addBatch({
   'not embedded files should not get mtime timestamp if "stamp" option equals false': {
-    topic: runOn('div{background:url(/test/data/gradient.jpg)}', { stamp: false, noEmbedVersion: true }),
+    topic: runOn('div{background:url(/test/data/gradient.jpg)}', {
+      stamp: false,
+      noEmbedVersion: true
+    }),
     'in the "embedded" version': function(data) {
       assert.equal(data.embedded.plain, data.original);
     },

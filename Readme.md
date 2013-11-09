@@ -1,6 +1,7 @@
-[![NPM version](https://badge.fury.io/js/enhance-css.png)](http://badge.fury.io/js/enhance-css)
-[![Build Status](https://secure.travis-ci.org/GoalSmashers/enhance-css.png)](http://travis-ci.org/GoalSmashers/enhance-css)
-[![Dependency Status](https://gemnasium.com/GoalSmashers/enhance-css.png)](https://gemnasium.com/GoalSmashers/enhance-css)
+[![NPM version](https://badge.fury.io/js/enhance-css.png)](https://badge.fury.io/js/enhance-css)
+[![Build Status](https://secure.travis-ci.org/GoalSmashers/enhance-css.png)](https://travis-ci.org/GoalSmashers/enhance-css)
+[![Dependency Status](https://david-dm.org/GoalSmashers/enhance-css.png)](https://david-dm.org/GoalSmashers/enhance-css)
+[![devDependency Status](https://david-dm.org/GoalSmashers/enhance-css/dev-status.png)](https://david-dm.org/GoalSmashers/enhance-css#info=devDependencies)
 
 ## What is enhance-css?
 

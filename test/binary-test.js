@@ -95,7 +95,10 @@ vows.describe('enhance css binary').addBatch({
       assert.isEmpty(stdout);
     },
     'should create valid files': function() {
-      checkFiles('test', { noEmbed: false, pregzip: false });
+      checkFiles('test', {
+        noEmbed: false,
+        pregzip: false
+      });
     },
     teardown: cleanup(1)
   }),
@@ -104,7 +107,11 @@ vows.describe('enhance css binary').addBatch({
       assert.isEmpty(stdout);
     },
     'should create valid files': function() {
-      checkFiles('test1', { stamp: false, noEmbed: true, pregzip: false });
+      checkFiles('test1', {
+        stamp: false,
+        noEmbed: true,
+        pregzip: false
+      });
     },
     teardown: cleanup(1)
   }),
@@ -113,7 +120,10 @@ vows.describe('enhance css binary').addBatch({
       assert.isEmpty(stdout);
     },
     'should create valid files': function() {
-      checkFiles('test2', { noEmbed: true, pregzip: false });
+      checkFiles('test2', {
+        noEmbed: true,
+        pregzip: false
+      });
     },
     teardown: cleanup(2)
   }),
@@ -122,7 +132,10 @@ vows.describe('enhance css binary').addBatch({
       assert.isEmpty(stdout);
     },
     'should create valid files': function() {
-      checkFiles('test3', { noEmbed: true, pregzip: true });
+      checkFiles('test3', {
+        noEmbed: true,
+        pregzip: true
+      });
     },
     teardown: cleanup(3)
   }),

@@ -3,6 +3,7 @@
   "version": "0.6.0",
   "author": "Jakub Pawlowicz <jakub@goalsmashers.com> (http://twitter.com/GoalSmashers)",
   "description": "A well-tested CSS enhancer (Base64, assets hosts, cache boosters, etc)",
+  "license": "MIT",
   "keywords": [
     "css",
     "enhance",
@@ -22,9 +23,16 @@
     "enhancecss": "./bin/enhancecss"
   },
   "main": "index.js",
+  "files": [
+    "bin",
+    "lib",
+    "History.md",
+    "index.js",
+    "LICENSE"
+  ],
   "scripts": {
-    "check": "jshint .",
-    "prepublish": "jshint .",
+    "check": "jshint ./bin/enhancecss .",
+    "prepublish": "npm run check",
     "test": "vows"
   },
   "dependencies": {
@@ -34,9 +42,26 @@
     "jshint": "2.3.x",
     "vows": "0.7.x"
   },
+  "jshintConfig": {
+    "browser" : false,
+    "camelcase": true,
+    "curly": false,
+    "eqeqeq": false,
+    "eqnull": true,
+    "immed": true,
+    "indent": 2,
+    "latedef": true,
+    "multistr": true,
+    "noarg": true,
+    "node" : true,
+    "plusplus": false,
+    "quotmark": "single",
+    "strict": false,
+    "trailing": true,
+    "undef": true,
+    "unused": true
+  },
   "engines": {
     "node": ">=0.8.0"
-  },
-  "readmeFilename": "Readme.md",
-  "license": "MIT"
+  }
 }
