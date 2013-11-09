@@ -54,11 +54,11 @@ var cleanup = function(no, callback) {
 };
 
 var binaryContext = function(options, context) {
+  if (isWindows)
+    return {};
+
   context.topic = function() {
-    if (isWindows)
-      exec('set __DIRECT__=1 & node .\\bin\\enhancecss ' + options, this.callback);
-    else
-      exec('__DIRECT__=1 ./bin/enhancecss ' + options, this.callback);
+    exec('__DIRECT__=1 ./bin/enhancecss ' + options, this.callback);
   };
   return context;
 };
