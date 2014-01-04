@@ -4,6 +4,7 @@
 * Adds a slightly different CLI options (because of #10).
 * Fixes #10 - use commander for CLI options parsing.
 * Fixes #16 - use prototypal inheritance.
+* Fixes #17 - makes the options argument to `new EnhanceCSS()` optional.
 * Drops node 0.6 support.
 
 0.6.0 / 2012-11-30

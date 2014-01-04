@@ -443,7 +443,7 @@ vows.describe('embedding images').addBatch({
   }
 }).addBatch({
   'get empty asset host': {
-    topic: new EnhanceCSS({}).nextAssetHost(),
+    topic: new EnhanceCSS().nextAssetHost(),
     'from empty configuration': function(host) {
       assert.equal(host, null);
     }
