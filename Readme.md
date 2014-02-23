@@ -5,12 +5,11 @@
 
 ## What is enhance-css?
 
-Enhance-css is a [node.js](http://nodejs.org/) library for enhancing CSS with:
+Enhance-css is a [node.js](http://nodejs.org/) tool which can tweak your CSS files to:
 
-* external file stamps to boost caching (either timestamps or MD5 hashes)
-* image embedding to [Base64](http://en.wikipedia.org/wiki/Base64)
-  (to reduce the number of requests)
-* spawning assets into multiple asset hosts (to parallelize requests)
+* improve caching - by rewriting URLs and renaming files to include either timestamps or MD5 hashes;
+* parellelize requests - by rewriting URLs with one or more asset hosts;
+* reduce number of requests - by embedding images as [Base64](http://en.wikipedia.org/wiki/Base64) data.
 
 There is also an option to create non-embedded version suited well
 for older browsers (IE 7 and below).
