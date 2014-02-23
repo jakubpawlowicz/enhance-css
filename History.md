@@ -2,21 +2,22 @@
 ==================
 
 * Adds a slightly different CLI options (because of #10).
+* Adds JSHint and makes sure code is valid. Patch by [@XhmikosR](https://github.com/XhmikosR).
+* Drops node 0.6 support.
 * Fixes #10 - use commander for CLI options parsing.
 * Fixes #16 - use prototypal inheritance.
 * Fixes #17 - makes the options argument to `new EnhanceCSS()` optional.
-* Drops node 0.6 support.
 
 0.6.0 / 2012-11-30
 ==================
 
-* Added `stamp` option (defaults to true) which controls adding timestamps. (thanks to [@borbit](https://github.com/borbit))
+* Added `stamp` option (defaults to true) which controls adding timestamps. Patch by [@borbit](https://github.com/borbit).
 * Added `--nostamp` option to binary.
 
 0.5.2 / 2012-09-05
 ==================
 
-* Added relative protocol to asset hosts if protocol part is not provided. (patch by [@borbit](https://github.com/borbit))
+* Added relative protocol to asset hosts if protocol part is not provided. Patch by [@borbit](https://github.com/borbit).
 
 0.5.1 / 2012-08-14
 ==================
