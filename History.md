@@ -1,4 +1,4 @@
-1.0.0 / 2013-xx-xx (UNRELEASED)
+[1.0.0 / 2014-02-23](https://github.com/GoalSmashers/enhance-css/compare/v0.6.0...v1.0.0)
 ==================
 
 * Adds a slightly different CLI options (because of #10).

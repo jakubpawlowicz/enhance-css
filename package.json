@@ -1,6 +1,6 @@
 {
   "name": "enhance-css",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "author": "Jakub Pawlowicz <jakub@goalsmashers.com> (http://twitter.com/GoalSmashers)",
   "description": "A well-tested CSS enhancer (Base64, assets hosts, cache boosters, etc)",
   "license": "MIT",
