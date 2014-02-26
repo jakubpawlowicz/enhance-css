@@ -1,5 +1,4 @@
 {
-  "browser" :   false,
   "camelcase":  true,
   "curly":      false,
   "eqeqeq":     false,
@@ -7,7 +6,6 @@
   "immed":      true,
   "indent":     2,
   "latedef":    true,
-  "multistr":   true,
   "noarg":      true,
   "node" :      true,
   "plusplus":   false,
