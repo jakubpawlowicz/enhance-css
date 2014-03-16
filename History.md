@@ -2,6 +2,7 @@
 ==================
 
 * Fixed issue [#19](https://github.com/GoalSmashers/enhance-css/issues/19) - adds option forcing embed on all assets.
+* Fixed issue [#21](https://github.com/GoalSmashers/enhance-css/issues/21) - adds warnings to binary and library.
 
 [1.0.0 / 2014-02-23](https://github.com/GoalSmashers/enhance-css/compare/v0.6.0...v1.0.0)
 ==================

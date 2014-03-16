@@ -78,6 +78,12 @@ function write(target, content) {
   }
 }
 
+function reportWarnings(list) {
+  list.forEach(function(warning) {
+    console.warn('WARNING: ' + warning);
+  });
+}
+
 function output(enhanced) {
   if (options.target) {
     write(options.target, enhanced.embedded);
@@ -86,4 +92,6 @@ function output(enhanced) {
   } else {
     write(process.stdout, enhanced.embedded);
   }
+
+  reportWarnings(enhanced.warnings);
 }

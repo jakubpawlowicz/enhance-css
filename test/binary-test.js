@@ -6,10 +6,7 @@ var zlib = require('zlib');
 
 var isWindows = process.platform == 'win32';
 
-var source = {
-  embed: 'a{background:url(/test/data/gradient.png?embed)}',
-  noembed: 'a{background:url(/test/data/gradient.png)}'
-};
+var source = 'a{background:url(/test/data/gradient.png?embed)}';
 
 var checkFiles = function(fileName, options) {
   var pathToFile = function(noEmbed, pregzip) {
@@ -70,10 +67,13 @@ var pipelinedContext = function(options, context) {
   if (isWindows)
     return {};
 
+  var cssSource = source;
+  if ('source' in context) {
+    cssSource = context.source;
+    delete context.source;
+  }
+
   context.topic = function() {
-    var cssSource = options.indexOf('--force-embed') > -1 ?
-      source.noembed :
-      source.embed;
     exec('echo "' + cssSource + '" | ./bin/enhancecss ' + options, this.callback);
   };
   return context;
@@ -171,5 +171,15 @@ vows.describe('enhance css binary').addBatch({
     'should create valid files': function() {
       checkFiles('test5', { noEmbed: false });
     }
+  }),
+  'warnings': pipelinedContext('-o /tmp/test6', {
+    'source': 'a{background:url(/test/data/gradient.webp?embed)}',
+    'should give empty output': function(error, stdout) {
+      assert.isEmpty(stdout);
+    },
+    'should output warnings in stderr': function(error, stdout, stderr) {
+      assert.equal(stderr, 'WARNING: File \'/test/data/gradient.webp\' skipped because of unknown content type.\n');
+    },
+    teardown: cleanup(6)
   })
 }).export(module);

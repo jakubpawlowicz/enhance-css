@@ -36,12 +36,24 @@ vows.describe('embedding images').addBatch({
     topic: runOn('div{width:100px;height:50px}'),
     'should be left intact': function(data) {
       assert.equal(data.embedded.plain, data.original);
+    },
+    'should yield no warnings': function(data) {
+      assert.deepEqual(data.warnings, []);
     }
   },
   'no embed': {
     topic: runOn('a{background:url(/test/data/gradient.jpg);}'),
-    'for no ?embed parameter': function(data) {
+    'should add a timestamp': function(data) {
       assert.equal(data.embedded.plain, 'a{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ');}');
+    }
+  },
+  'unsupported': {
+    topic: runOn('a{background:url(/test/data/gradient.webp?embed);}', { stamp: false }),
+    'should be left intact': function(data) {
+      assert.equal(data.embedded.plain, data.original);
+    },
+    'should yield a warning': function(data) {
+      assert.deepEqual(data.warnings, ['File \'/test/data/gradient.webp\' skipped because of unknown content type.']);
     }
   },
   'urls with special characters #1': {
@@ -60,6 +72,9 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAKAAoDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0D/h7BrH/AEG7P/vmH/Gj/h7BrH/Qbs/++Yf8a/kX/tbVf+gnqH/gbc//AByj+1tV/wCgnqH/AIG3P/xyv9DFmeH0/wCEnL+n/LqP9z+75/gux/qgsJlWn/CRl/T/AJcR/wCnfkf/2Q==)}'),
     'should not be changed': function(data) {
       assert.equal(data.embedded.plain, data.original);
+    },
+    'should yield no warnings': function(data) {
+      assert.deepEqual(data.warnings, []);
     }
   },
   'same urls with mixed characters': {
@@ -76,10 +91,33 @@ vows.describe('embedding images').addBatch({
       assert.equal(data.embedded.plain, 'a{background:url(/test/data/gradient.png?' + mtime('gradient.png') + ')}');
     }
   },
-  'external url': {
-    topic: runOn('a{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAL0lEQVQYlWP8vPYPA27A8vPDT3zSH+9/xC/9CZ/0+3dv8Em/+4hf+tNrSqQpMRwASS8b5/ih3SAAAAAASUVORK5CYII=)}'),
-    'should not be transformed': function(data) {
-      assert.equal(data.embedded.plain, data.original);
+  'remote url': {
+    'via http': {
+      topic: runOn('a{background:url(http://pro.goalsmashers.com/test.png)}'),
+      'should not be transformed': function(data) {
+        assert.equal(data.embedded.plain, data.original);
+      },
+      'should yield a warning': function(data) {
+        assert.deepEqual(data.warnings, ['File \'http://pro.goalsmashers.com/test.png\' skipped because is not local.']);
+      }
+    },
+    'via https': {
+      topic: runOn('a{background:url(https://pro.goalsmashers.com/test.png)}'),
+      'should not be transformed': function(data) {
+        assert.equal(data.embedded.plain, data.original);
+      },
+      'should yield a warning': function(data) {
+        assert.deepEqual(data.warnings, ['File \'https://pro.goalsmashers.com/test.png\' skipped because is not local.']);
+      }
+    },
+    'same protocol': {
+      topic: runOn('a{background:url(//pro.goalsmashers.com/test.png)}'),
+      'should not be transformed': function(data) {
+        assert.equal(data.embedded.plain, data.original);
+      },
+      'should yield a warning': function(data) {
+        assert.deepEqual(data.warnings, ['File \'//pro.goalsmashers.com/test.png\' skipped because is not local.']);
+      }
     }
   },
   'one file to be embedded': {
@@ -101,12 +139,15 @@ vows.describe('embedding images').addBatch({
       assert.equal(runOn(css('svg'))().embedded.plain, 'a{background:url(data:image/svg+xml;base64,' + base64('gradient.svg') + ')}');
     }
   },
-  'more than one file marked with ?embed': {
+  'same file marked with ?embed twice': {
     topic: runOn('a{background:url(/test/data/gradient.jpg?embed)} div{background:url(/test/data/gradient.jpg?embed)}'),
     'should not embed to Base64': function(data) {
       assert.equal(data.embedded.plain,
         'a{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ')} div{background:url(/test/data/gradient.jpg?' + mtime('gradient.jpg') + ')}'
       );
+    },
+    'should yield a warning': function(data) {
+      assert.deepEqual(data.warnings, ['File \'/test/data/gradient.jpg\' set for embedding more than once.']);
     }
   },
   'more than one file and only one marked with ?embed': {
@@ -130,6 +171,9 @@ vows.describe('embedding images').addBatch({
     topic: runOn('a{background:url(/test/data/gradient2.png)}'),
     'should be left intact': function(data) {
       assert.equal(data.embedded.plain, data.original);
+    },
+    'should yield a warning': function(data) {
+      assert.deepEqual(data.warnings, ['File \'/test/data/gradient2.png\' does not exist.']);
     }
   },
   'forced embedding': {
