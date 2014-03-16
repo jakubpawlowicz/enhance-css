@@ -1,3 +1,8 @@
+[1.1.0 / 2014-xx-xx (UNRELEASED)](https://github.com/GoalSmashers/enhance-css/compare/v1.0.0...v1.1.0)
+==================
+
+* Fixed issue [#19](https://github.com/GoalSmashers/enhance-css/issues/19) - adds option forcing embed on all assets.
+
 [1.0.0 / 2014-02-23](https://github.com/GoalSmashers/enhance-css/compare/v0.6.0...v1.0.0)
 ==================
 

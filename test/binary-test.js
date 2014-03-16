@@ -6,7 +6,10 @@ var zlib = require('zlib');
 
 var isWindows = process.platform == 'win32';
 
-var source = 'a{background:url(/test/data/gradient.png?embed);}';
+var source = {
+  embed: 'a{background:url(/test/data/gradient.png?embed)}',
+  noembed: 'a{background:url(/test/data/gradient.png)}'
+};
 
 var checkFiles = function(fileName, options) {
   var pathToFile = function(noEmbed, pregzip) {
@@ -68,7 +71,10 @@ var pipelinedContext = function(options, context) {
     return {};
 
   context.topic = function() {
-    exec('echo "' + source + '" | ./bin/enhancecss ' + options, this.callback);
+    var cssSource = options.indexOf('--force-embed') > -1 ?
+      source.noembed :
+      source.embed;
+    exec('echo "' + cssSource + '" | ./bin/enhancecss ' + options, this.callback);
   };
   return context;
 };
@@ -157,5 +163,13 @@ vows.describe('enhance css binary').addBatch({
     teardown: cleanup(4, function() {
       exec('rm -rf ' + process.cwd() + '/test/data/gradient-*.png');
     })
+  }),
+  'forced embed': pipelinedContext('--force-embed -o /tmp/test5.css', {
+    'should give empty output': function(error, stdout) {
+      assert.isEmpty(stdout);
+    },
+    'should create valid files': function() {
+      checkFiles('test5', { noEmbed: false });
+    }
   })
 }).export(module);

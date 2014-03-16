@@ -41,6 +41,7 @@ enhancecss [options] [source-file]
 --crypted-stamp               Rename image files with MD5 hash attached (hard cache boosters)
 --no-stamp                    Disable adding stamp to URLs
 --no-embed-version            Output both embedded and non embedded version
+--force-embed                 Forces embed on all supported assets
 --asset-hosts [host-pattern]  Use one or more asset hosts, e.g assets[0,1,2].example.com
 --pregzip                     Automatically gzip the enhanced files (not available when no output file given)
 ```

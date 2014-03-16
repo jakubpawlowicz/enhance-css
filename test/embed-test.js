@@ -132,6 +132,26 @@ vows.describe('embedding images').addBatch({
       assert.equal(data.embedded.plain, data.original);
     }
   },
+  'forced embedding': {
+    'for same assets': {
+      topic: runOn('a{background:url(/test/data/gradient.png)} div{background:url(/test/data/gradient.png)}', { forceEmbed: true }),
+      'should embed all resources': function(data) {
+        assert.equal(data.embedded.plain, [
+          'a{background:url(data:image/png;base64,' + base64('gradient.png') + ')}',
+          'div{background:url(data:image/png;base64,' + base64('gradient.png') + ')}',
+        ].join(' '));
+      }
+    },
+    'for different assets': {
+      topic: runOn('a{background:url(/test/data/gradient.png)} div{background:url(/test/data/gradient.jpg)}', { forceEmbed: true }),
+      'should embed all resources': function(data) {
+        assert.equal(data.embedded.plain, [
+          'a{background:url(data:image/png;base64,' + base64('gradient.png') + ')}',
+          'div{background:url(data:image/jpeg;base64,' + base64('gradient.jpg') + ')}',
+        ].join(' '));
+      }
+    }
+  },
   'adding assets hosts': {
     topic: 'a{background:url(/test/data/gradient.png)} p{background:url(/test/data/gradient.jpg)} div{background:url(/test/data/gradient.gif)}',
     'single': function(css) {
