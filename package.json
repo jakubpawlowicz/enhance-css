@@ -36,7 +36,7 @@
     "test": "vows"
   },
   "dependencies": {
-    "commander": "2.2.x"
+    "commander": "2.3.x"
   },
   "devDependencies": {
     "jshint": "2.5.x",
