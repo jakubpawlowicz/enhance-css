@@ -1,7 +1,7 @@
 {
   "name": "enhance-css",
   "version": "1.1.0",
-  "author": "Jakub Pawlowicz <jakub@goalsmashers.com> (http://twitter.com/GoalSmashers)",
+  "author": "Jakub Pawlowicz <contact@jakubpawlowicz.com> (http://twitter.com/jakubpawlowicz)",
   "description": "A well-tested CSS enhancer (Base64, assets hosts, cache boosters, etc)",
   "license": "MIT",
   "keywords": [
@@ -11,13 +11,13 @@
     "assets",
     "asset hosts"
   ],
-  "homepage": "https://github.com/GoalSmashers/enhance-css",
+  "homepage": "https://github.com/jakubpawlowicz/enhance-css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoalSmashers/enhance-css.git"
+    "url": "https://github.com/jakubpawlowicz/enhance-css.git"
   },
   "bugs": {
-    "url": "https://github.com/GoalSmashers/enhance-css/issues"
+    "url": "https://github.com/jakubpawlowicz/enhance-css/issues"
   },
   "bin": {
     "enhancecss": "./bin/enhancecss"
