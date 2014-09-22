@@ -1,7 +1,7 @@
-[![NPM version](https://badge.fury.io/js/enhance-css.png)](https://badge.fury.io/js/enhance-css)
-[![Build Status](https://secure.travis-ci.org/jakubpawlowicz/enhance-css.png)](https://travis-ci.org/jakubpawlowicz/enhance-css)
-[![Dependency Status](https://david-dm.org/jakubpawlowicz/enhance-css.png?theme=shields.io)](https://david-dm.org/jakubpawlowicz/enhance-css)
-[![devDependency Status](https://david-dm.org/jakubpawlowicz/enhance-css/dev-status.png?theme=shields.io)](https://david-dm.org/jakubpawlowicz/enhance-css#info=devDependencies)
+[![NPM version](https://badge.fury.io/js/enhance-css.svg)](https://badge.fury.io/js/enhance-css)
+[![Build Status](https://secure.travis-ci.org/jakubpawlowicz/enhance-css.svg)](https://travis-ci.org/jakubpawlowicz/enhance-css)
+[![Dependency Status](https://david-dm.org/jakubpawlowicz/enhance-css.svg)](https://david-dm.org/jakubpawlowicz/enhance-css)
+[![devDependency Status](https://david-dm.org/jakubpawlowicz/enhance-css/dev-status.svg)](https://david-dm.org/jakubpawlowicz/enhance-css#info=devDependencies)
 
 ## What is enhance-css?
 
