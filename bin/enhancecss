@@ -19,6 +19,7 @@ commands
   .option('--crypted-stamp', 'Rename image files with MD5 hash attached (hard cache boosters)')
   .option('--no-stamp', 'Disable adding stamp to URLs')
   .option('--no-embed-version', 'Output both embedded and non embedded version')
+  .option('--force-embed', 'Forces embed on all supported assets')
   .option('--asset-hosts [host-pattern]', 'Use one or more asset hosts, e.g assets[0,1,2].example.com')
   .option('--pregzip', 'Automatically gzip the enhanced files (not available when no output file given)')
   .parse(process.argv);
@@ -39,7 +40,8 @@ var options = {
   pregzip: !!commands.pregzip,
   noEmbedVersion: !commands.embedVersion,
   cryptedStamp: !!commands.cryptedStamp,
-  stamp: !!commands.stamp
+  stamp: !!commands.stamp,
+  forceEmbed: !!commands.forceEmbed
 };
 
 if (options.source) {
@@ -76,6 +78,12 @@ function write(target, content) {
   }
 }
 
+function reportWarnings(list) {
+  list.forEach(function(warning) {
+    console.warn('WARNING: ' + warning);
+  });
+}
+
 function output(enhanced) {
   if (options.target) {
     write(options.target, enhanced.embedded);
@@ -84,4 +92,6 @@ function output(enhanced) {
   } else {
     write(process.stdout, enhanced.embedded);
   }
+
+  reportWarnings(enhanced.warnings);
 }

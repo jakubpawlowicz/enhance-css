@@ -1,7 +1,7 @@
 [![NPM version](https://badge.fury.io/js/enhance-css.png)](https://badge.fury.io/js/enhance-css)
 [![Build Status](https://secure.travis-ci.org/GoalSmashers/enhance-css.png)](https://travis-ci.org/GoalSmashers/enhance-css)
-[![Dependency Status](https://david-dm.org/GoalSmashers/enhance-css.png)](https://david-dm.org/GoalSmashers/enhance-css)
-[![devDependency Status](https://david-dm.org/GoalSmashers/enhance-css/dev-status.png)](https://david-dm.org/GoalSmashers/enhance-css#info=devDependencies)
+[![Dependency Status](https://david-dm.org/GoalSmashers/enhance-css.png?theme=shields.io)](https://david-dm.org/GoalSmashers/enhance-css)
+[![devDependency Status](https://david-dm.org/GoalSmashers/enhance-css/dev-status.png?theme=shields.io)](https://david-dm.org/GoalSmashers/enhance-css#info=devDependencies)
 
 ## What is enhance-css?
 
@@ -41,6 +41,7 @@ enhancecss [options] [source-file]
 --crypted-stamp               Rename image files with MD5 hash attached (hard cache boosters)
 --no-stamp                    Disable adding stamp to URLs
 --no-embed-version            Output both embedded and non embedded version
+--force-embed                 Forces embed on all supported assets
 --asset-hosts [host-pattern]  Use one or more asset hosts, e.g assets[0,1,2].example.com
 --pregzip                     Automatically gzip the enhanced files (not available when no output file given)
 ```

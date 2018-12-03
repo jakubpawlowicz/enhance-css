@@ -6,7 +6,7 @@ var zlib = require('zlib');
 
 var isWindows = process.platform == 'win32';
 
-var source = 'a{background:url(/test/data/gradient.png?embed);}';
+var source = 'a{background:url(/test/data/gradient.png?embed)}';
 
 var checkFiles = function(fileName, options) {
   var pathToFile = function(noEmbed, pregzip) {
@@ -67,8 +67,14 @@ var pipelinedContext = function(options, context) {
   if (isWindows)
     return {};
 
+  var cssSource = source;
+  if ('source' in context) {
+    cssSource = context.source;
+    delete context.source;
+  }
+
   context.topic = function() {
-    exec('echo "' + source + '" | ./bin/enhancecss ' + options, this.callback);
+    exec('echo "' + cssSource + '" | ./bin/enhancecss ' + options, this.callback);
   };
   return context;
 };
@@ -157,5 +163,23 @@ vows.describe('enhance css binary').addBatch({
     teardown: cleanup(4, function() {
       exec('rm -rf ' + process.cwd() + '/test/data/gradient-*.png');
     })
+  }),
+  'forced embed': pipelinedContext('--force-embed -o /tmp/test5.css', {
+    'should give empty output': function(error, stdout) {
+      assert.isEmpty(stdout);
+    },
+    'should create valid files': function() {
+      checkFiles('test5', { noEmbed: false });
+    }
+  }),
+  'warnings': pipelinedContext('-o /tmp/test6', {
+    'source': 'a{background:url(/test/data/gradient.webp?embed)}',
+    'should give empty output': function(error, stdout) {
+      assert.isEmpty(stdout);
+    },
+    'should output warnings in stderr': function(error, stdout, stderr) {
+      assert.equal(stderr, 'WARNING: File \'/test/data/gradient.webp\' skipped because of unknown content type.\n');
+    },
+    teardown: cleanup(6)
   })
 }).export(module);
